@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #F4F9FF;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Empêche tout décalage horizontal */
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@layer utilities {
+  /* Styles pour les cartes d'intervenants */
+  .border-3 {
+    border-width: 3px;
+  }
+
+  /* Amélioration de la troncature de texte */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Animation pour les cartes d'intervenants */
+  .intervenant-card {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .intervenant-card:hover {
+    transform: translateY(-2px);
+  }
+}
