@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, Linkedin, Send, MapPin, Phone, Mail } from "lucide-react";
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, Send, MapPin, Phone, Mail } from "lucide-react";
 import Logo from "../commun/Logo";
-import axios from "axios";
-
-// Configuration globale d'axios
-axios.defaults.baseURL = 'http://localhost:8000';
-axios.defaults.withCredentials = true;
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+import axios from "../../axios";
+import { API_ROUTES } from "../../config/api.config";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -16,6 +12,11 @@ export default function Footer() {
   const [isLoading, setIsLoading] = useState(false);
   const currentYear = new Date().getFullYear();
 
+  const socialLinks = [
+    { icon: Facebook, href: 'https://web.facebook.com/profile.php?id=61573191698612', label: 'Facebook' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/company/forum-marocain-pour-le-d%C3%A9veloppement-durable/', label: 'LinkedIn' },
+    { icon: Instagram, href: 'https://www.instagram.com/f.m.d.d?igsh=MTliaHV1YjBnMW03Mg==', label: 'Instagram' },
+  ];
   // Récupérer le token CSRF au chargement du composant
   useEffect(() => {
     const getCsrfToken = async () => {
@@ -62,26 +63,15 @@ export default function Footer() {
     }
 
     try {
-      // Récupérer un nouveau token CSRF avant chaque soumission
+      // 1. Refresh CSRF cookie before post
       await axios.get('/sanctum/csrf-cookie');
 
-      // Récupérer le token XSRF-TOKEN du cookie
-      const cookies = document.cookie.split(';');
-      const xsrfToken = cookies.find(cookie => cookie.trim().startsWith('XSRF-TOKEN='));
-      const token = xsrfToken ? decodeURIComponent(xsrfToken.split('=')[1]) : '';
-
-      const response = await axios.post('/api/v1/newsletter/subscribe', {
+      // 2. Submit using the configured axios instance
+      const response = await axios.post(API_ROUTES.newsletter.subscribe, {
         email: email
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-XSRF-TOKEN': token
-        }
       });
 
-      if (response.data.status === 'success') {
+      if (response.data.status === 'success' || response.status === 200 || response.status === 201) {
         setIsError(false);
         setMessage("Merci de vous être abonné(e) !");
         setEmail("");
@@ -93,10 +83,12 @@ export default function Footer() {
       setIsError(true);
       if (error.response?.data?.message) {
         setMessage(error.response.data.message);
+      } else if (error.response?.data?.errors?.email) {
+        setMessage(error.response.data.errors.email[0]);
       } else if (error.code === 'ERR_NETWORK') {
-        setMessage("Impossible de se connecter au serveur. Veuillez vérifier que le serveur est en cours d'exécution.");
+        setMessage("Impossible de se connecter au serveur.");
       } else {
-        setMessage("Une erreur est survenue. Veuillez réessayer plus tard.");
+        setMessage("Une erreur est survenue. Veuillez réessayer.");
       }
       console.error('Erreur newsletter:', error);
     } finally {
@@ -123,15 +115,17 @@ export default function Footer() {
             <p className="text-sm md:text-base mb-4">
               Le Forum Marocain pour le Développement Durable œuvre pour promouvoir les pratiques durables et la sensibilisation environnementale au Maroc.
             </p>
-            <div className="flex space-x-3">
-              {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
-                <a 
-                  key={i} 
-                  href="#" 
-                  className="hover:text-yellow-500 transition-all duration-200" 
-                  aria-label={`Lien vers ${Icon.name}`}
+            <div className="flex space-x-3 justify-start">
+              {socialLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-yellow-500 transition-all duration-200"
+                  aria-label={link.label}
                 >
-                  <Icon size={22} />
+                  <link.icon size={22} />
                 </a>
               ))}
             </div>
@@ -145,12 +139,13 @@ export default function Footer() {
                 { path: "/", label: "Accueil" },
                 { path: "/formations", label: "Formations" },
                 { path: "/a-propos", label: "À propos" },
+                { path: "/temoignages", label: "Témoignages" },
                 { path: "/contact", label: "Contact" },
                 { path: "/actualites", label: "Actualités" }
               ].map((item, i) => (
                 <li key={i}>
-                  <Link 
-                    to={item.path} 
+                  <Link
+                    to={item.path}
                     className="hover:text-yellow-500 transition-all duration-200"
                   >
                     {item.label}
@@ -166,7 +161,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin size={20} className="mr-3 mt-1" />
-                <span>123 Av. Mohammed V, Rabat, Maroc</span>
+                <span>Avenue des FAR, Casablanca, Maroc</span>
               </li>
               <li className="flex items-center">
                 <Phone size={20} className="mr-3" />
@@ -174,7 +169,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center">
                 <Mail size={20} className="mr-3" />
-                <span>fmdd.contact@gmail.com</span>
+                <span>contact@fmdd.ma</span>
               </li>
             </ul>
           </div>
@@ -201,9 +196,8 @@ export default function Footer() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className={`bg-yellow-500 rounded-r-md px-3 py-2 text-blue-900 hover:bg-opacity-90 transition-all duration-200 ${
-                    isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
+                  className={`bg-yellow-500 rounded-r-md px-3 py-2 text-blue-900 hover:bg-opacity-90 transition-all duration-200 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
                   aria-label="S'abonner à la newsletter"
                 >
                   {isLoading ? (
@@ -226,14 +220,14 @@ export default function Footer() {
         <div className="border-t border-gray-600 mt-8 pt-6 text-center text-sm md:text-base">
           <p>© {currentYear} FMDD. Tous droits réservés.</p>
           <div className="mt-2 space-x-4">
-            <Link 
-              to="/mentions-legales" 
+            <Link
+              to="/mentions-legales"
               className="hover:text-yellow-500 transition-all duration-200"
             >
               Mentions légales
             </Link>
-            <Link 
-              to="/politique-confidentialite" 
+            <Link
+              to="/politique-confidentialite"
               className="hover:text-yellow-500 transition-all duration-200"
             >
               Politique de confidentialité

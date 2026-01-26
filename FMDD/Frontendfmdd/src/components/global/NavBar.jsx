@@ -3,6 +3,7 @@ import { Link, useLocation, Navigate, useNavigate } from "react-router-dom";
 import { Menu, X, Globe, ChevronDown } from "lucide-react";
 import Logo from "../commun/Logo";
 import { useAuth } from "../../contexts/AuthContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 import defaultAvatar from "../../assets/images/g2.jpg"; // Assurez-vous que ce fichier existe
 
 function DropdownMenu({ title, links, isActive }) {
@@ -21,11 +22,10 @@ function DropdownMenu({ title, links, isActive }) {
   return (
     <div className="group relative">
       <button
-        className={`flex items-center transition-all ${
-          isActive(links)
-            ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-            : "hover:text-yellow-500"
-        }`}
+        className={`flex items-center transition-all ${isActive(links)
+          ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+          : "hover:text-yellow-500"
+          }`}
       >
         {title} <ChevronDown size={16} className="ml-2" />
       </button>
@@ -44,9 +44,8 @@ function DropdownMenu({ title, links, isActive }) {
             <Link
               key={index}
               to={link.path}
-              className={`block px-4 py-2 hover:bg-teal-500 hover:text-white rounded transition-colors ${
-                location.pathname === link.path ? "bg-teal-500 text-white" : ""
-              }`}
+              className={`block px-4 py-2 hover:bg-teal-500 hover:text-white rounded transition-colors ${location.pathname === link.path ? "bg-teal-500 text-white" : ""
+                }`}
             >
               {link.label}
             </Link>
@@ -61,9 +60,9 @@ const Navbar = memo(() => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
+  const { language, setLanguage } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
-  const [language, setLanguage] = useState("FR");
 
   const dashboardLink = user?.role ? `/dashboard/${user.role}` : '/dashboard';
 
@@ -173,19 +172,17 @@ const Navbar = memo(() => {
           <div className="hidden lg:flex items-center space-x-8">
             <Link
               to="/"
-              className={`hover:text-yellow-500 transition-all ${
-                isActive("/") ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]" : ""
-              }`}
+              className={`hover:text-yellow-500 transition-all ${isActive("/") ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]" : ""
+                }`}
             >
               {translations[language].home}
             </Link>
             <Link
               to="/formations"
-              className={`hover:text-yellow-500 transition-all ${
-                isActive("/formations")
-                  ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-                  : ""
-              }`}
+              className={`hover:text-yellow-500 transition-all ${isActive("/formations")
+                ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+                : ""
+                }`}
             >
               {translations[language].formations}
             </Link>
@@ -297,20 +294,18 @@ const Navbar = memo(() => {
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-white hover:text-yellow-500 transition-all ${
-                isActive("/") ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]" : ""
-              }`}
+              className={`block py-2 text-white hover:text-yellow-500 transition-all ${isActive("/") ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]" : ""
+                }`}
             >
               {translations[language].home}
             </Link>
             <Link
               to="/formations"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-white hover:text-yellow-500 transition-all ${
-                isActive("/formations")
-                  ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-                  : ""
-              }`}
+              className={`block py-2 text-white hover:text-yellow-500 transition-all ${isActive("/formations")
+                ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+                : ""
+                }`}
             >
               {translations[language].formations}
             </Link>
@@ -318,88 +313,80 @@ const Navbar = memo(() => {
             <Link
               to="/a-propos"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-white hover:text-yellow-500 transition-all ${
-                isActive("/a-propos")
-                  ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-                  : ""
-              }`}
+              className={`block py-2 text-white hover:text-yellow-500 transition-all ${isActive("/a-propos")
+                ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+                : ""
+                }`}
             >
               {translations[language].about}
             </Link>
             <Link
               to="/contact"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-white hover:text-yellow-500 transition-all ${
-                isActive("/contact")
-                  ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-                  : ""
-              }`}
+              className={`block py-2 text-white hover:text-yellow-500 transition-all ${isActive("/contact")
+                ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+                : ""
+                }`}
             >
               {translations[language].contact}
             </Link>
             <Link
               to="/galerie"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-white hover:text-yellow-500 transition-all ${
-                isActive("/galerie")
-                  ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-                  : ""
-              }`}
+              className={`block py-2 text-white hover:text-yellow-500 transition-all ${isActive("/galerie")
+                ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+                : ""
+                }`}
             >
               {translations[language].gallery}
             </Link>
             <Link
               to="/temoignages"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-white hover:text-yellow-500 transition-all ${
-                isActive("/temoignages")
-                  ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-                  : ""
-              }`}
+              className={`block py-2 text-white hover:text-yellow-500 transition-all ${isActive("/temoignages")
+                ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+                : ""
+                }`}
             >
               {translations[language].testimonials}
             </Link>
             <Link
               to="/projets"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-white hover:text-yellow-500 transition-all ${
-                isActive("/projets")
-                  ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-                  : ""
-              }`}
+              className={`block py-2 text-white hover:text-yellow-500 transition-all ${isActive("/projets")
+                ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+                : ""
+                }`}
             >
               {translations[language].projects}
             </Link>
             <Link
               to="/evenements"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-white hover:text-yellow-500 transition-all ${
-                isActive("/evenements")
-                  ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-                  : ""
-              }`}
+              className={`block py-2 text-white hover:text-yellow-500 transition-all ${isActive("/evenements")
+                ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+                : ""
+                }`}
             >
               {translations[language].events}
             </Link>
             <Link
               to="/insertion"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-white hover:text-yellow-500 transition-all ${
-                isActive("/insertion")
-                  ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-                  : ""
-              }`}
+              className={`block py-2 text-white hover:text-yellow-500 transition-all ${isActive("/insertion")
+                ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+                : ""
+                }`}
             >
               {translations[language].jobPlacement}
             </Link>
             <Link
               to="/actualites"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-white hover:text-yellow-500 transition-all ${
-                isActive("/actualites")
-                  ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-                  : ""
-              }`}
+              className={`block py-2 text-white hover:text-yellow-500 transition-all ${isActive("/actualites")
+                ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+                : ""
+                }`}
             >
               {translations[language].blog}
             </Link>
@@ -419,11 +406,10 @@ const Navbar = memo(() => {
             <Link
               to="/fmdd-school"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-center bg-yellow-500 text-white rounded-md transition-colors ${
-                isActive("/fmdd-school")
-                  ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
-                  : "hover:bg-teal-500"
-              }`}
+              className={`block py-2 text-center bg-yellow-500 text-white rounded-md transition-colors ${isActive("/fmdd-school")
+                ? "text-yellow-500 border-b-2 border-yellow-500 mb-[-2px]"
+                : "hover:bg-teal-500"
+                }`}
             >
               {translations[language].eLearning}
             </Link>

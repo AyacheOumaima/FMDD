@@ -165,7 +165,7 @@ export default function ContactPage() {
       </Helmet>
 
       {/* Header */}
-      <div className="bg-blue-950 py-20">
+      <div className="bg-blue-950 py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-poppins font-bold text-white mb-4">Contactez-nous</h1>
           <p className="text-xl text-gray-200 max-w-3xl">
@@ -191,11 +191,9 @@ export default function ContactPage() {
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-blue-dark mb-1">Adresse</h3>
                   <p className="text-gray-700">
-                    123 Avenue Mohammed V
+                    Avenue des FAR, Centre ville
                     <br />
-                    Quartier Agdal
-                    <br />
-                    Rabat, Maroc
+                    Casablanca, Maroc
                   </p>
                 </div>
               </div>
@@ -208,8 +206,8 @@ export default function ContactPage() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-blue-dark mb-1">Téléphone</h3>
-                  <a href="tel:+2125XXXXXXXX" className="text-gray-700 hover:text-blue-dark">
-                    +212 5 XX XX XX XX
+                  <a href="tel:+212645766188" className="text-gray-700 hover:text-blue-dark">
+                    +212 6 45 76 61 88
                   </a>
                 </div>
               </div>
@@ -247,7 +245,7 @@ export default function ContactPage() {
             {/* WhatsApp Button */}
             <div>
               <a
-                href="https://google.com" // Consider replacing with actual WhatsApp link, e.g., `https://wa.me/2125XXXXXXXX`
+                href="https://wa.me/212645766188"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-6 py-3 rounded-md bg-green-600 text-white hover:bg-green-700 transition"
@@ -265,7 +263,7 @@ export default function ContactPage() {
                 <h2 className="text-2xl font-poppins font-bold text-blue-dark mb-6">Envoyez-nous un message</h2>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg shadow-md p-6 space-y-6">
-                  {/* API Error message is now handled by react-toastify, so this div can be removed */}
+
                   {/* {apiError && (
                     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
                       {apiError}
@@ -285,9 +283,8 @@ export default function ContactPage() {
                           minLength: { value: 2, message: 'Le nom doit contenir au moins 2 caractères.' },
                           maxLength: { value: 100, message: 'Le nom ne peut pas dépasser 100 caractères.' }, // Added max length
                         })}
-                        className={`w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-turquoise ${
-                          errors.name ? 'border-red-500 focus:ring-red-500' : ''
-                        }`}
+                        className={`w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-turquoise ${errors.name ? 'border-red-500 focus:ring-red-500' : ''
+                          }`}
                         aria-invalid={errors.name ? 'true' : 'false'} // ARIA attribute for accessibility
                       />
                       {errors.name && (
@@ -311,9 +308,8 @@ export default function ContactPage() {
                             message: 'Veuillez saisir une adresse email valide.',
                           },
                         })}
-                        className={`w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-turquoise ${
-                          errors.email ? 'border-red-500 focus:ring-red-500' : ''
-                        }`}
+                        className={`w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-turquoise ${errors.email ? 'border-red-500 focus:ring-red-500' : ''
+                          }`}
                         aria-invalid={errors.email ? 'true' : 'false'}
                       />
                       {errors.email && (
@@ -331,9 +327,8 @@ export default function ContactPage() {
                     <select
                       id="subject"
                       {...register('subject', { required: 'Veuillez sélectionner un sujet.' })}
-                      className={`w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-turquoise ${
-                        errors.subject ? 'border-red-500 focus:ring-red-500' : ''
-                      }`}
+                      className={`w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-turquoise ${errors.subject ? 'border-red-500 focus:ring-red-500' : ''
+                        }`}
                       aria-invalid={errors.subject ? 'true' : 'false'}
                     >
                       {sujets.map((sujet) => (
@@ -361,9 +356,8 @@ export default function ContactPage() {
                         minLength: { value: 10, message: 'Le message doit contenir au moins 10 caractères.' },
                         maxLength: { value: 1000, message: 'Le message ne peut pas dépasser 1000 caractères.' }, // Added max length
                       })}
-                      className={`w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-turquoise ${
-                        errors.message ? 'border-red-500 focus:ring-red-500' : ''
-                      }`}
+                      className={`w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-turquoise ${errors.message ? 'border-red-500 focus:ring-red-500' : ''
+                        }`}
                       aria-invalid={errors.message ? 'true' : 'false'}
                     ></textarea>
                     {errors.message && (
