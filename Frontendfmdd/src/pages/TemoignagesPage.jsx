@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Play, Pause } from 'lucide-react';
-import api from '../axios'; // axios instance مع withCredentials و xsrf
+import api from '../axios';
 import TemoignageCard from '../components/TestimonialCard';
 import { API_ROUTES, SANCTUM_COOKIE_URL } from '../config/api.config';
 
@@ -9,29 +9,26 @@ const grande_Description =
   "Découvrez les témoignages de personnes qui ont bénéficié des programmes du FMDD. Ces histoires illustrent l'impact concret de nos actions sur les individus, les organisations et les communautés à travers le Maroc.";
 
 const TemoignagesPage = () => {
-  // Form states
   const [afficherFormulaire, setAfficherFormulaire] = useState(false);
   const [nom, setNom] = useState('');
   const [poste, setPoste] = useState('');
   const [titre, setTitre] = useState('');
   const [temoignage, setTemoignage] = useState('');
-  const [messageRetour, setMessageRetour] = useState('');
 
-  // Témoignages
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState(''); 
+
   const [temoignages, setTemoignages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Video play
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // * Fetch témoignages depuis le backend
   useEffect(() => {
     const fetchTemoignages = async () => {
       try {
         setLoading(true);
         const response = await api.get(API_ROUTES.temoignages.index);
-        // Filtrer que ceux acceptés
         const acceptedTestimonials = response.data.data.filter(t => t.statut === 'accepte');
         setTemoignages(acceptedTestimonials);
         setError(null);
@@ -46,11 +43,16 @@ const TemoignagesPage = () => {
     fetchTemoignages();
   }, []);
 
-  
+  const showToast = (message, type = 'success', duration = 3000) => {
+    setToastMessage(message);
+    setToastType(type);
+    setTimeout(() => setToastMessage(''), duration);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // ! Get CSRF cookie
+     
       await api.get(SANCTUM_COOKIE_URL);
 
       const data = {
@@ -63,20 +65,18 @@ const TemoignagesPage = () => {
         statut: 'en_attente',
       };
 
-      const response = await api.post(API_ROUTES.temoignages.store, data);
+      await api.post(API_ROUTES.temoignages.store, data);
 
-      setMessageRetour('Témoignage envoyé avec succès (en attente de validation) ✅');
+      showToast('Témoignage envoyé avec succès (en attente de validation)', 'success');
       setNom('');
       setPoste('');
       setTitre('');
       setTemoignage('');
       setAfficherFormulaire(false);
 
-      console.log('Success:', response.data);
     } catch (error) {
-      console.error('Erreur complète:', error);
-      console.error('Données réponse:', error.response?.data);
-      setMessageRetour("Erreur lors de l'envoi du témoignage ❌");
+      console.error(error);
+      showToast("Erreur lors de l'envoi du témoignage ", 'error');
     }
   };
 
@@ -84,6 +84,16 @@ const TemoignagesPage = () => {
 
   return (
     <div className="bg-blue-light min-h-screen">
+      {toastMessage && (
+        <div
+          className={`fixed top-5 right-5 px-4 py-2 rounded shadow text-white z-50 transition-all duration-300 ${
+            toastType === 'success' ? 'bg-green-600' : 'bg-red-600'
+          }`}
+        >
+          {toastMessage}
+        </div>
+      )}
+
       <div className="relative">
         <img
           src="https://images.pexels.com/photos/3861467/pexels-photo-3861467.jpeg"
@@ -121,6 +131,7 @@ const TemoignagesPage = () => {
             </div>
           </div>
         </div>
+
         <div className="grid md:grid-cols-3 gap-6">
           {loading ? (
             <p>Chargement...</p>
@@ -139,7 +150,7 @@ const TemoignagesPage = () => {
             ))
           )}
         </div>
-                  {/* ?Formulaire */}
+
         <div className="flex flex-col items-center mt-12">
           <button
             onClick={() => setAfficherFormulaire(!afficherFormulaire)}
@@ -153,9 +164,6 @@ const TemoignagesPage = () => {
               onSubmit={handleSubmit}
               className="mt-8 w-full max-w-md bg-white p-6 rounded-lg shadow-lg"
             >
-              {messageRetour && (
-                <p className="mb-4 text-center text-sm text-green-600">{messageRetour}</p>
-              )}
               <label className="block text-[#13335F] font-semibold mb-2">Votre nom</label>
               <input
                 type="text"

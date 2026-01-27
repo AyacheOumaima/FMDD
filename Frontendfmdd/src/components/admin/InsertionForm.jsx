@@ -10,7 +10,7 @@ const InsertionForm = () => {
   const location = useLocation();
   const { user } = useAuth();
 
-  const insertion = location.state?.insertion || null; // ⬅️ بيانات التعديل
+  const insertion = location.state?.insertion || null;
   const isEditing = insertion !== null;
 const initialValues = insertion || {
   poste: '',
@@ -50,16 +50,16 @@ const handleSubmit = async (e) => {
       await api.post(`/api/v1/insertions/${insertion.id}?_method=PUT`, data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
+      navigate('/admin/insertions', { state: { successMessage: 'Insertion modifiée avec succès ' } });
     } else {
       await api.post('/api/v1/insertions', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
+      navigate('/admin/insertions', { state: { successMessage: 'Insertion ajoutée avec succès ' } });
     }
 
-    navigate('/admin/insertions');
   } catch (error) {
-    console.error('❌ Erreur insertion:', error.response?.data || error);
-     console.log(error.response.data.errors);
+    console.error(' Erreur insertion:', error.response?.data || error);
     alert('Erreur lors de la sauvegarde de l’insertion');
   } finally {
     setLoading(false);
@@ -169,9 +169,6 @@ const handleSubmit = async (e) => {
     required
   />
 </div>
-
-
-        {/* Buttons */}
         <div className="flex justify-end gap-3">
           <button
             type="button"

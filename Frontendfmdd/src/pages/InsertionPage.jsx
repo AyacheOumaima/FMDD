@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
 import { ArrowRight } from 'lucide-react';
 import InsertionCard from '../components/InsertionCard';
-import api from '../axios'; // تأكدي المسار صحيح
+import api from '../axios'; 
 
 const InsertionPage = () => {
   const [insertions, setInsertions] = useState([]);
@@ -13,34 +13,28 @@ const InsertionPage = () => {
   const [searchCity, setSearchCity] = useState('');
   const [searchContract, setSearchContract] = useState('');
 
-  // 🔹 جلب insertions من backend
   useEffect(() => {
      console.log('Token actuel:', localStorage.getItem('token'));
     const fetchInsertions = async () => {
       try {
         const response = await api.get('/api/v1/insertions');
-        setInsertions(response.data.data); // controller كيرجع data
+        setInsertions(response.data.data); 
       } catch (error) {
         console.error('Erreur chargement insertions', error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchInsertions();
   }, []);
-
-  // 🔹 filtrage
   const filteredInsertions = insertions.filter((item) =>
     item.poste.toLowerCase().includes(searchPost.toLowerCase()) &&
     (item.ville ?? '').toLowerCase().includes(searchCity.toLowerCase()) &&
     (searchContract === '' || item.type_contrat === searchContract)
   );
-
   return (
     <div className="bg-blue-light min-h-screen pb-16">
 
-      {/* Hero */}
       <div className="relative w-full h-[300px] md:h-[350px] bg-cover bg-center">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1521791136064-7986c2920216')] bg-cover bg-center">
           <div className="absolute inset-0 bg-blue-dark opacity-70"></div>
@@ -55,7 +49,6 @@ const InsertionPage = () => {
 
       <div className="container mx-auto pt-10 px-4">
 
-        {/* Process */}
         <div className="bg-white rounded-xl shadow-md p-6 mb-12 flex justify-center gap-6">
           {[1, 2, 3].map((step) => (
             <div key={step} className="text-center">
@@ -66,7 +59,6 @@ const InsertionPage = () => {
           ))}
         </div>
 
-        {/* Search */}
         <div className="mb-8 flex flex-col md:flex-row bg-white rounded-lg shadow-md">
           <div className="flex items-center px-4 py-2 w-full md:w-1/3 border">
             <FaSearch className="text-[#FFB347] mr-2" />
@@ -104,7 +96,6 @@ const InsertionPage = () => {
           </div>
         </div>
 
-        {/* Results */}
         {loading ? (
           <p>Chargement...</p>
         ) : filteredInsertions.length > 0 ? (

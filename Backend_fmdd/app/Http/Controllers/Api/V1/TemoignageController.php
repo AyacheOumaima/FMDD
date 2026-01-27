@@ -11,16 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class TemoignageController extends Controller
 {
-    // Lister les témoignages visibles pour les visiteurs
-    // public function index()
-    // {
-    //     $temoignages = Temoignage::where('is_visible', true)->latest()->get();
 
-    //     return response()->json([
-    //         'status' => 'success',
-    //         'data' => $temoignages
-    //     ]);
-    // }
 public function index()
 {
     $temoignages = Temoignage::where('statut', 'accepter')
@@ -33,17 +24,16 @@ public function index()
     ]);
 }
 
-    // Ajouter un nouveau témoignage
     public function store(Request $request)
     {
-        // Validation
+        
         $validator = Validator::make($request->all(), [
             'nom' => 'required|string|max:255',
             'poste' => 'nullable|string|max:255',
             'titre' => 'required|string|max:255',
             'message' => 'required|string',
             'rating' => 'nullable|integer|min:1|max:5',
-            'photo' => 'nullable|image|max:2048', // 2MB
+            'photo' => 'nullable|image|max:2048', 
         ]);
 
         if ($validator->fails()) {
@@ -65,7 +55,7 @@ public function index()
             'message' => $data['message'],
             'photo' => $data['photo'] ?? null,
             'rating' => $data['rating'] ?? null,
-            'is_visible' => false, // Témoignage invisible par défaut
+            'is_visible' => false, 
             'statut' => 'en_attente',
         ]);
 
