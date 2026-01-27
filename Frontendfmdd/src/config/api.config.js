@@ -28,7 +28,13 @@ export const API_ROUTES = {
     // ✅ DATA (API Level - uses /api/v1 prefix)
     // Adjust '/me' if your backend uses '/api/user'
     me: `${API_PREFIX}/me`, 
-
+ insertions: {
+        index: `${API_PREFIX}/insertions`,
+        store: `${API_PREFIX}/insertions`,
+        show: (id) => `${API_PREFIX}/insertions/${id}`,
+        update: (id) => `${API_PREFIX}/insertions/${id}`,
+        destroy: (id) => `${API_PREFIX}/insertions/${id}`,
+    },
     events: {
         index: `${API_PREFIX}/events`,
         show: (id) => `${API_PREFIX}/events/${id}`,
@@ -42,6 +48,14 @@ export const API_ROUTES = {
         sponsoring: (id) => `${API_PREFIX}/projets/${id}/sponsoring`,
         partenariat: (id) => `${API_PREFIX}/projets/${id}/partenariat`
     },
+   temoignages: {
+    index: `${API_PREFIX}/temoignages`,
+    store: `${API_PREFIX}/temoignages`,
+    show: (id) => `${API_PREFIX}/temoignages/${id}`,
+    update: (id) => `${API_PREFIX}/temoignages/${id}`,
+    destroy: (id) => `${API_PREFIX}/temoignages/${id}`,
+},
+
     paiements: {
         create: `${API_PREFIX}/paiements`,
         verify: (id) => `${API_PREFIX}/paiements/verify/${id}`

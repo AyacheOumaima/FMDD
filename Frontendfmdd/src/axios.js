@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { SANCTUM_COOKIE_URL, API_CONFIG } from './config/api.config';
 
+
 // 1. Create the main instance
 const api = axios.create({
     baseURL: API_CONFIG.baseURL,

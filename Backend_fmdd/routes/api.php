@@ -23,6 +23,8 @@ use App\Http\Controllers\Api\V1\NewsletterController;
 use App\Http\Controllers\Api\V1\FormationController;
 use App\Http\Controllers\Api\V1\InsertionController;
 use App\Http\Controllers\Api\V1\TemoignageController;
+use App\Http\Controllers\Api\V1\ProfileController;
+
 
 // Routes publiques avec middleware web pour la newsletter
 Route::middleware(['web'])->group(function () {
@@ -42,7 +44,12 @@ Route::prefix('v1')->group(function () {
     Route::get('/contact', [ContactController::class, 'index']);
     Route::get('/contact/info', [ContactController::class, 'getInfoContact']);
     Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:contact');
-    
+    // *Routes Temoignages (public)
+    Route::get('/temoignages', [TemoignageController::class, 'index']);
+    Route::post('/temoignages', [TemoignageController::class, 'store']);
+        // *Routes insertions (public)
+    Route::get('/insertions', [InsertionController::class, 'index']);
+    Route::get('/insertions/{id}', [InsertionController::class, 'show']);
     // Routes de la galerie publiques
     Route::get('/gallery', [GalleryController::class, 'index']);
     Route::get('/gallery/categories', [GalleryController::class, 'categories']);
@@ -89,6 +96,13 @@ Route::prefix('v1')->group(function () {
 
 // ========== ROUTES PROTÉGÉES ==========
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
+     Route::middleware(['role:admin'])->group(function () {
+        Route::post('/insertions', [InsertionController::class, 'store']);
+        Route::put('/insertions/{id}', [InsertionController::class, 'update']);
+        Route::delete('/insertions/{id}', [InsertionController::class, 'destroy']);
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::put('/profile', [ProfileController::class, 'update']);
+    });
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
@@ -112,7 +126,12 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         // Fix 2: Resources (Map Frontend names to Backend Controllers)
         Route::apiResource('formations', FormationController::class);
         Route::apiResource('insertions', InsertionController::class);
-        Route::apiResource('temoignages', TemoignageController::class);
+        // Routes Temoignages (Admin)
+        Route::get('/temoignages', [TemoignageController::class, 'all']);
+        Route::put('/temoignages/{id}', [TemoignageController::class, 'update']);
+        Route::delete('/temoignages/{id}', [TemoignageController::class, 'destroy']);
+
+        // Route::apiResource('temoignages', TemoignageController::class);
         Route::apiResource('evenements', EventController::class); // Frontend calls it 'evenements'
         
         // 👇👇 THIS WAS THE MISSING LINE FOR PROJECTS 👇👇
@@ -166,8 +185,10 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::post('/demandes-partenariat/{demande_id}/valider', [DemandePartenariatProjetController::class, 'valider']);
         Route::post('/demandes-sponsoring/{demande_id}/valider', [DemandeSponsoringProjetController::class, 'valider']);
     });
-
+    
     Route::middleware('role:super_admin')->group(function () {
         // Routes super admin
     });
 });
+
+

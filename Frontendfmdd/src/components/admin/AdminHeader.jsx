@@ -17,7 +17,7 @@ const AdminHeader = () => {
 
   return (
     <header className="bg-white shadow">
-      <div className="flex items-center justify-between px-4 h-16">
+      {/* <div className="flex items-center justify-between px-4 h-16">
         <div className="flex items-center">
           <h1 className="text-xl font-bold text-blue-800">FMDD Admin</h1>
         </div>
@@ -33,7 +33,7 @@ const AdminHeader = () => {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
     </header>
   );
 };

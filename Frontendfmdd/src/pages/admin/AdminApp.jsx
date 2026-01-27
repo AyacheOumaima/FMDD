@@ -20,6 +20,7 @@ import BlogPostForm from '../../components/admin/BlogPostForm';
 import GalleryItemForm from '../../components/admin/GalleryItemForm';
 import AProposForm from '../../components/admin/AProposForm';
 import AdminRoutes from '../../routes/AdminRoutes';
+import EditProfile from '../../components/admin/EditProfile';
 
 const AdminApp = () => {
   const { user } = useAuth();
@@ -31,6 +32,7 @@ const AdminApp = () => {
         {/* Dashboard */}
         <Route path="dashboard" element={<DashboardAdmin />} />
 
+        <Route path="/edit-profile" element={<EditProfile />} />  
         {/* Projets */}
         <Route path="projets" element={<ProjetsAdmin />} />
         <Route path="projets/new" element={<ProjetForm />} />
