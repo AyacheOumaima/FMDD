@@ -4,7 +4,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 
 export default function AboutFMDD() {
   const { language } = useLanguage();
-  const lang = ["FR","EN","AR"].includes(language) ? language : "FR";
+  const lang = (language && ["FR", "EN", "AR"].includes(language.toUpperCase())) ? language.toUpperCase() : "FR";
 
   const texts = {
     FR: {
@@ -83,15 +83,13 @@ export default function AboutFMDD() {
           {/* Mission tripartite */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {texts[lang].missions.map((mission, i) => (
-              <div key={i} className={`text-center p-8 rounded-2xl hover:shadow-lg transition-shadow ${
-                i===0 ? "bg-amber-50" : i===1 ? "bg-teal-50" : "bg-emerald-50"
-              }`}>
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 ${
-                  i===0 ? "bg-amber-500" : i===1 ? "bg-teal-600" : "bg-emerald-600"
-                }`}>
-                  {i===0 && <Target className="w-8 h-8 text-white" />}
-                  {i===1 && <Lightbulb className="w-8 h-8 text-white" />}
-                  {i===2 && <Heart className="w-8 h-8 text-white" />}
+              <div key={i} className={`text - center p - 8 rounded - 2xl hover: shadow - lg transition - shadow ${i === 0 ? "bg-amber-50" : i === 1 ? "bg-teal-50" : "bg-emerald-50"
+                } `}>
+                <div className={`inline - flex items - center justify - center w - 16 h - 16 rounded - full mb - 6 ${i === 0 ? "bg-amber-500" : i === 1 ? "bg-teal-600" : "bg-emerald-600"
+                  } `}>
+                  {i === 0 && <Target className="w-8 h-8 text-white" />}
+                  {i === 1 && <Lightbulb className="w-8 h-8 text-white" />}
+                  {i === 2 && <Heart className="w-8 h-8 text-white" />}
                 </div>
                 <h3 className="text-2xl font-bold text-blue-950 mb-4">{mission.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{mission.desc}</p>
@@ -108,13 +106,12 @@ export default function AboutFMDD() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {texts[lang].values.map((val, i) => (
                 <div key={i} className="text-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                  <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full mb-4 ${
-                    i===0 ? "bg-amber-100" : i===1 ? "bg-teal-100" : i===2 ? "bg-blue-100" : "bg-emerald-100"
-                  }`}>
-                    {i===0 && <Shield className="w-6 h-6 text-amber-600" />}
-                    {i===1 && <Heart className="w-6 h-6 text-teal-600" />}
-                    {i===2 && <Lightbulb className="w-6 h-6 text-blue-600" />}
-                    {i===3 && <Target className="w-6 h-6 text-emerald-600" />}
+                  <div className={`inline - flex items - center justify - center w - 12 h - 12 rounded - full mb - 4 ${i === 0 ? "bg-amber-100" : i === 1 ? "bg-teal-100" : i === 2 ? "bg-blue-100" : "bg-emerald-100"
+                    } `}>
+                    {i === 0 && <Shield className="w-6 h-6 text-amber-600" />}
+                    {i === 1 && <Heart className="w-6 h-6 text-teal-600" />}
+                    {i === 2 && <Lightbulb className="w-6 h-6 text-blue-600" />}
+                    {i === 3 && <Target className="w-6 h-6 text-emerald-600" />}
                   </div>
                   <h4 className="text-lg font-semibold text-blue-950 mb-2">{val.title}</h4>
                   <p className="text-sm text-gray-600">{val.desc}</p>

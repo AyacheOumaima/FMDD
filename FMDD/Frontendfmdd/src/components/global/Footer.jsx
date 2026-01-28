@@ -98,7 +98,7 @@ export default function Footer() {
     }
   };
 
-  const t = translations[language];
+  const t = translations[language] || translations.FR;
 
   const socialLinks = [
     { icon: Facebook, href: 'https://web.facebook.com/profile.php?id=61573191698612', label: 'Facebook' },

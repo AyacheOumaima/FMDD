@@ -7,7 +7,7 @@ import { useLanguage } from "../../contexts/LanguageContext";
 
 export default function FeaturedCourses() {
   const { language } = useLanguage();
-  const lang = ["FR", "EN", "AR"].includes(language) ? language : "FR";
+  const lang = (language && ["FR", "EN", "AR"].includes(language.toUpperCase())) ? language.toUpperCase() : "FR";
 
   const texts = {
     FR: {
@@ -24,7 +24,7 @@ export default function FeaturedCourses() {
           instructor: "Prof. Ahmed Benani",
           duration: "10 heures",
           price: "Gratuit",
-          image: "https://source.unsplash.com/400x320/?sustainability",
+          image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800",
         },
         {
           id: 2,
@@ -32,7 +32,7 @@ export default function FeaturedCourses() {
           instructor: "Dr. Leila Zaoui",
           duration: "15 heures",
           price: "350 MAD",
-          image: "https://source.unsplash.com/400x320/?environment",
+          image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800",
         },
         {
           id: 3,
@@ -40,7 +40,7 @@ export default function FeaturedCourses() {
           instructor: "Ing. Karim Tazi",
           duration: "12 heures",
           price: "200 MAD",
-          image: "https://source.unsplash.com/400x320/?renewable-energy",
+          image: "https://images.unsplash.com/photo-1466611653911-954554331f4a?auto=format&fit=crop&q=80&w=800",
         },
       ],
     },
@@ -59,7 +59,7 @@ export default function FeaturedCourses() {
           instructor: "Prof. Ahmed Benani",
           duration: "10 hours",
           price: "Free",
-          image: "https://source.unsplash.com/400x320/?sustainability",
+          image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800",
         },
         {
           id: 2,
@@ -67,7 +67,7 @@ export default function FeaturedCourses() {
           instructor: "Dr. Leila Zaoui",
           duration: "15 hours",
           price: "350 MAD",
-          image: "https://source.unsplash.com/400x320/?environment",
+          image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800",
         },
         {
           id: 3,
@@ -75,7 +75,7 @@ export default function FeaturedCourses() {
           instructor: "Ing. Karim Tazi",
           duration: "12 hours",
           price: "200 MAD",
-          image: "https://source.unsplash.com/400x320/?renewable-energy",
+          image: "https://images.unsplash.com/photo-1466611653911-954554331f4a?auto=format&fit=crop&q=80&w=800",
         },
       ],
     },
@@ -94,7 +94,7 @@ export default function FeaturedCourses() {
           instructor: "الأستاذ أحمد بناني",
           duration: "10 ساعات",
           price: "مجاني",
-          image: "https://source.unsplash.com/400x320/?sustainability",
+          image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800",
         },
         {
           id: 2,
@@ -102,7 +102,7 @@ export default function FeaturedCourses() {
           instructor: "الدكتورة ليلى الزاوي",
           duration: "15 ساعة",
           price: "350 درهم",
-          image: "https://source.unsplash.com/400x320/?environment",
+          image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800",
         },
         {
           id: 3,
@@ -110,7 +110,7 @@ export default function FeaturedCourses() {
           instructor: "المهندس كريم تازي",
           duration: "12 ساعة",
           price: "200 درهم",
-          image: "https://source.unsplash.com/400x320/?renewable-energy",
+          image: "https://images.unsplash.com/photo-1466611653911-954554331f4a?auto=format&fit=crop&q=80&w=800",
         },
       ],
     },
