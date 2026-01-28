@@ -1,75 +1,102 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import EventCard from "../components/commun/EventCard";
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_ROUTES } from "../config/api.config";
 import api from "../axios";
+import { useLanguage } from "../contexts/LanguageContext";
 
-// Fonction pour obtenir les informations d'un mois donné
-const getMonthInfo = (date) => {
+const texts = {
+  FR: {
+    title: "Nos Événements",
+    description:
+      "Découvrez les événements à venir du FMDD. Conférences, ateliers, formations et rencontres sont organisés régulièrement pour promouvoir le développement durable et créer un réseau d'acteurs engagés.",
+    noEvents: "Aucun événement à venir"
+  },
+  EN: {
+    title: "Our Events",
+    description:
+      "Discover upcoming FMDD events. Conferences, workshops, trainings and meetings are regularly organized to promote sustainable development and build a network of committed actors.",
+    noEvents: "No upcoming events"
+  },
+  AR: {
+    title: "فعالياتنا",
+    description:
+      "اكتشف الفعاليات القادمة لمنظمة FMDD من مؤتمرات وورشات وتكوينات ولقاءات تُنظم بانتظام لتعزيز التنمية المستدامة وبناء شبكة من الفاعلين الملتزمين.",
+    noEvents: "لا توجد فعاليات قادمة"
+  }
+};
+
+const CALENDAR_DATA = {
+  FR: {
+    months: [
+      "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+      "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+    ],
+    weekDays: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+    locale: "fr-FR"
+  },
+  EN: {
+    months: [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ],
+    weekDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    locale: "en-US"
+  },
+  AR: {
+    months: [
+      "يناير", "فبراير", "مارس", "أبريل", "ماي", "يونيو",
+      "يوليوز", "غشت", "شتنبر", "أكتوبر", "نونبر", "دجنبر"
+    ],
+    weekDays: ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"],
+    locale: "ar-MA"
+  }
+};
+
+const getMonthInfo = (date, lang) => {
   const year = date.getFullYear();
   const month = date.getMonth();
-  const firstDay = new Date(year, month, 1).getDay(); // 0 = Dimanche, 1 = Lundi, etc.
-  const daysInMonth = new Date(year, month + 1, 0).getDate(); // Nombre de jours dans le mois
-  const monthNames = [
-    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
-  ];
-  
   return {
-    name: monthNames[month],
-    days: daysInMonth,
-    firstDay: firstDay,
-    year: year,
-    month: month
+    name: CALENDAR_DATA[lang].months[month],
+    days: new Date(year, month + 1, 0).getDate(),
+    firstDay: new Date(year, month, 1).getDay(),
+    year,
+    month
   };
 };
 
-const weekDays = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
-
-// Fonction pour formater la date au format "jour mois" (ex: "15 septembre")
-const formatDateToDayMonth = (dateString) => {
-  const date = new Date(dateString);
-  const day = date.getDate();
-  const month = date.toLocaleString('fr-FR', { month: 'long' });
-  return `${day} ${month}`.toLowerCase();
-};
-
-// Fonction pour formater la date complète (ex: "15 septembre 2025")
-const formatFullDate = (dateString) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString('fr-FR', options);
+const formatFullDate = (dateString, lang) => {
+  return new Date(dateString).toLocaleDateString(
+    CALENDAR_DATA[lang].locale,
+    { year: "numeric", month: "long", day: "numeric" }
+  );
 };
 
 export default function EvenementsPage() {
-  const [currentDate, setCurrentDate] = useState(new Date()); // Date actuelle pour le calendrier
-  const currentMonthInfo = getMonthInfo(currentDate);
+  const { language } = useLanguage();
+  const lang = texts[language] ? language : "FR";
+
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const currentMonthInfo = getMonthInfo(currentDate, lang);
+  const weekDays = CALENDAR_DATA[lang].weekDays;
+
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        // Récupérer tous les événements avec leurs détails
         const response = await api.get(API_ROUTES.events.index, {
-          params: { with_details: true } // Ajouter un paramètre pour indiquer qu'on veut les détails complets
+          params: { with_details: true }
         });
-        console.log('Réponse de l\'API événements:', response);
-        
-        // S'assurer que nous avons bien un tableau d'événements
-        const eventsData = response.data.data || [];
-        console.log('Événements extraits:', eventsData);
-        
-        // Stocker les événements dans le state
-        setEvents(eventsData);
-        
-        // Stocker également dans le localStorage pour la page de détail
-        localStorage.setItem('cachedEvents', JSON.stringify(eventsData));
-      } catch (error) {
+        setEvents(response.data.data || []);
+        localStorage.setItem("cachedEvents", JSON.stringify(response.data.data || []));
+      } catch {
         toast.error("Erreur lors de la récupération des événements");
       } finally {
         setLoading(false);
@@ -79,148 +106,105 @@ export default function EvenementsPage() {
   }, []);
 
   const nextMonth = () => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(newDate.getMonth() + 1);
-    setCurrentDate(newDate);
+    const d = new Date(currentDate);
+    d.setMonth(d.getMonth() + 1);
+    setCurrentDate(d);
   };
 
   const prevMonth = () => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(newDate.getMonth() - 1);
-    setCurrentDate(newDate);
-  }; 
-  
-  // Vérifie si une date donnée a un événement
-  const hasEvent = (day) => {
-    if (!Array.isArray(events) || !events.length) return false;
-    
-    const eventDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-    
-    return events.some(event => {
-      if (!event || !event.date) return false;
-      
-      const eventDateObj = new Date(event.date);
+    const d = new Date(currentDate);
+    d.setMonth(d.getMonth() - 1);
+    setCurrentDate(d);
+  };
+
+  const hasEvent = (day) =>
+    events.some(e => {
+      const d = new Date(e.date);
       return (
-        eventDate.getDate() === eventDateObj.getDate() &&
-        eventDate.getMonth() === eventDateObj.getMonth() &&
-        eventDate.getFullYear() === eventDateObj.getFullYear()
+        d.getDate() === day &&
+        d.getMonth() === currentDate.getMonth() &&
+        d.getFullYear() === currentDate.getFullYear()
       );
     });
-  };
-  
-  // Récupère le titre de l'événement pour un jour donné
-  const getEventTitle = (day) => {
-    if (!Array.isArray(events) || !events.length) return null;
-    
-    const eventDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-    const event = events.find(event => {
-      if (!event || !event.date) return false;
-      
-      const eventDateObj = new Date(event.date);
-      return (
-        eventDate.getDate() === eventDateObj.getDate() &&
-        eventDate.getMonth() === eventDateObj.getMonth() &&
-        eventDate.getFullYear() === eventDateObj.getFullYear()
-      );
-    });
-    
-    return event ? event.titre : null;
-  };
-
-
-
-  const handleEventClick = (eventId) => {
-    navigate(`/evenements/${eventId}`);
-  };
 
   return (
-    <div className="py-12 bg-blue-light min-h-screen">
+    <div
+      className="py-12 bg-blue-light min-h-screen"
+      dir={lang === "AR" ? "rtl" : "ltr"}
+    >
       <div className="container mx-auto px-4">
+
+        {/* Page title & description */}
         <h1 className="text-3xl md:text-4xl font-poppins font-bold text-blue-dark mb-6">
-          Nos Événements
+          {texts[lang].title}
         </h1>
         <p className="mb-8 text-gray-700 max-w-3xl">
-          Découvrez les événements à venir du FMDD. Conférences, ateliers, formations et rencontres
-          sont organisés régulièrement pour promouvoir le développement durable et créer un réseau d'acteurs engagés.
+          {texts[lang].description}
         </p>
 
-        {/* Calendrier interactif */}
+        {/* Calendar */}
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <div className="flex justify-between items-center mb-4">
-            <button onClick={prevMonth} className="p-2 rounded-full hover:bg-gray-100">
-              <ChevronLeft size={20} />
-            </button>
-            <h2 className="text-xl font-poppins font-semibold">
+            <button onClick={prevMonth}><ChevronLeft size={20} /></button>
+            <h2 className="text-xl font-semibold">
               {currentMonthInfo.name} {currentMonthInfo.year}
             </h2>
-            <button onClick={nextMonth} className="p-2 rounded-full hover:bg-gray-100">
-              <ChevronRight size={20} />
-            </button>
+            <button onClick={nextMonth}><ChevronRight size={20} /></button>
           </div>
+
           <div className="grid grid-cols-7 gap-1">
             {weekDays.map(day => (
               <div key={day} className="text-center font-medium p-2">{day}</div>
             ))}
+
             {Array.from({ length: currentMonthInfo.firstDay }).map((_, i) => (
-              <div key={`empty-${i}`} className="h-12 p-1"></div>
+              <div key={`empty-${i}`}></div>
             ))}
+
             {Array.from({ length: currentMonthInfo.days }).map((_, i) => {
               const day = i + 1;
-              const hasEvt = hasEvent(day);
               return (
                 <div
-                  key={`day-${day}`}
-                  className={`h-12 p-1 relative rounded-md ${hasEvt ? 'bg-yellow-400  bg-opacity-20 cursor-pointer' : ''}`}
-                  title={hasEvt ? getEventTitle(day) : undefined}
+                  key={day}
+                  className={`h-12 flex items-center justify-center rounded
+                    ${hasEvent(day) ? "bg-yellow-200 cursor-pointer" : ""}`}
+                  title={hasEvent(day) ? "Event" : undefined}
                 >
-                  <div className="text-center">
-                    {day}
-                    {hasEvt && (
-                      <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
-                        <div className="w-2 h-2 bg-yellow rounded-full"></div>
-                      </div>
-                    )}
-                  </div>
+                  {day}
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Liste des événements */}
-        <div className="space-y-6">
-          {loading ? (
-            <div className="text-center py-12">
-              <Loader2 size={40} className="text-gray-500" />
-            </div>
-          ) : (
-            events.length > 0 ? (
-              events.map((event) => (
-                <div 
-                  key={event.id} 
-                  onClick={() => handleEventClick(event.id)}
-                  className="cursor-pointer hover:opacity-90 transition-opacity"
-                >
-                  
-                  <EventCard
-                    id={event.id}
-                    title={event.titre}
-                    date={formatFullDate(event.date)}
-                    location={`${event.ville}, Maroc`}
-                    description={event.description}
-                    image={event.image || "https://via.placeholder.com/600x400?text=Événement"}
-                    category={event.categorie || "Événement"}
-                    price={event.type_evenement === 'gratuit' ? 'Gratuit' : `${event.prix} DH`}
-                  />
-                </div>
-              ))
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-500">Aucun événement à venir pour le moment</p>
+        {/* Events */}
+        {loading ? (
+          <div className="text-center py-12">
+            <Loader2 className="mx-auto animate-spin" size={40} />
+          </div>
+        ) : (
+          events.length > 0 ? (
+            events.map(event => (
+              <div
+                key={event.id}
+                onClick={() => navigate(`/evenements/${event.id}`)}
+                className="cursor-pointer hover:opacity-90 transition-opacity"
+              >
+                <EventCard
+                  title={event.titre}
+                  date={formatFullDate(event.date, lang)}
+                  location={`${event.ville}, Maroc`}
+                  description={event.description}
+                  image={event.image || "https://via.placeholder.com/600x400?text=Événement"}
+                />
               </div>
-            )
-          )}
-        </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-500">
+              {texts[lang].noEvents}
+            </p>
+          )
+        )}
       </div>
     </div>
   );

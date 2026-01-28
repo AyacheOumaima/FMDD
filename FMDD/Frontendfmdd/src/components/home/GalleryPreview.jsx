@@ -113,9 +113,10 @@ export default function GalleryPreview() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [activeImage, setActiveImage] = useState(null);
   const { language } = useLanguage();
+  const lang = (language && ["FR", "EN", "AR"].includes(language.toUpperCase())) ? language.toUpperCase() : "FR";
 
-  const currentGalleryData = GALLERY_DATA[language] || GALLERY_DATA.FR;
-  const t = TRANSLATIONS[language] || TRANSLATIONS.FR;
+  const currentGalleryData = GALLERY_DATA[lang];
+  const t = TRANSLATIONS[lang];
 
   const openLightbox = (index) => {
     setActiveImage(index);
