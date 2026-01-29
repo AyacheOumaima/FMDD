@@ -236,13 +236,13 @@ const Navbar = memo(() => {
                 <div className="absolute right-0 mt-3 w-44 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition z-50">
                   <Link
                     to={dashboardLink}
-                    className="block px-4 py-2 hover:bg-teal-500 hover:text-white"
+                    className="block text-black px-4 py-2 hover:bg-teal-500 hover:text-white"
                   >
                     {t[language].profile}
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white"
+                    className="w-full text-black text-left px-4 py-2 hover:bg-red-500 hover:text-white"
                   >
                     {t[language].logout}
                   </button>
@@ -251,7 +251,7 @@ const Navbar = memo(() => {
             ) : (
               <Link
                 to="/login"
-                className="bg-yellow-500 px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-500 transition flex items-center gap-1"
+                className="bg-yellow-500 text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-500 transition flex items-center gap-1"
               >
                 <MdAccountCircle size={18} />
                 {t[language].login}

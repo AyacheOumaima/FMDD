@@ -21,7 +21,7 @@ const FormateurDashboard = () => {
         // Récupérer les cours assignés
         const coursesResponse = await axios.get('/courses/assigned');
         setCourses(coursesResponse.data);
-        
+
         // Récupérer les statistiques
         const statsResponse = await axios.get('/formateur/stats');
         setStats(statsResponse.data);
@@ -35,6 +35,14 @@ const FormateurDashboard = () => {
     fetchCourses();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-6 sm:py-8 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,7 +51,7 @@ const FormateurDashboard = () => {
           <div className="flex justify-between items-start">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                Bienvenue, {user?.first_name}
+                Bienvenue, {user?.first_name || 'Formateur'}
               </h1>
               <p className="mt-1 text-sm text-gray-500">
                 Dashboard Formateur
@@ -79,7 +87,7 @@ const FormateurDashboard = () => {
                 Notes moyennes
               </h3>
               <p className="text-3xl font-semibold text-yellow-900">
-                {stats.notes_moyennes.toFixed(1)}
+                {(stats.notes_moyennes || 0).toFixed(1)}
               </p>
             </div>
             <div className="bg-purple-50 p-6 rounded-lg">
