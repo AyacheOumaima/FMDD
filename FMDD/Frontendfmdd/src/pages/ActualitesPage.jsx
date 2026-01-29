@@ -4,7 +4,7 @@ import { Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import BlogCard from "../components/commun/BlogCard";
 import api from "../axios";
-import { useLanguage } from "../../contexts/LanguageContext";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export default function ActualitesPage() {
   const { language } = useLanguage();

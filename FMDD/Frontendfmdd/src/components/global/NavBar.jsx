@@ -116,9 +116,9 @@ const Navbar = memo(() => {
       blog: 'المدونة',
       newsletter: 'النشرة',
       elearning: 'التعليم الإلكتروني',
-      login: 'تسجيل الدخول',
-      profile: 'الملف الشخصي',
-      logout: 'تسجيل الخروج',
+      login: "تسجيل الدخول",
+      profile: "الملف الشخصي",
+      logout: "تسجيل الخروج"
     },
   };
 
@@ -324,13 +324,13 @@ const Navbar = memo(() => {
             </>
           ) : (
             <Link
-            to="/login"
-            onClick={handleLinkClick}
-            className=" py-2 text-center bg-yellow-500 rounded-lg text-white hover:bg-teal-500 flex items-center justify-center gap-1"
-          >
-            <MdAccountCircle size={18} />
-            {t[language].login}
-          </Link>
+              to="/login"
+              onClick={handleLinkClick}
+              className=" py-2 text-center bg-yellow-500 rounded-lg text-white hover:bg-teal-500 flex items-center justify-center gap-1"
+            >
+              <MdAccountCircle size={18} />
+              {t[language].login}
+            </Link>
           )}
         </div>
       )}
