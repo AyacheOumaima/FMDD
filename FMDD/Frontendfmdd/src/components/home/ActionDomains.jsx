@@ -4,7 +4,7 @@ import { useLanguage } from "../../contexts/LanguageContext";
 
 export default function ActionDomains() {
   const { language } = useLanguage();
-  const lang = ["FR", "EN", "AR"].includes(language) ? language : "FR";
+  const lang = (language && ["FR", "EN", "AR"].includes(language.toUpperCase())) ? language.toUpperCase() : "FR";
 
   const texts = {
     FR: {
