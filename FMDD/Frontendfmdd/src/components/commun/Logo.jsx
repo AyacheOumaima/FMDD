@@ -1,7 +1,9 @@
 export default function Logo() {
   return (
     <div className="logo flex items-center">
-      <img src="/assets/LOGO.jpg" alt="Logo" className="h-12 w-auto rounded-full border border-gray-300" />
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-primary">
+            <img src="/assets/LOGO.jpg" alt="logo" className='rounded-full'/>
+          </div>
     </div>
   );
 }
