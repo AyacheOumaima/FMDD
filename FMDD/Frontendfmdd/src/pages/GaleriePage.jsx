@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Lightbox from '../components/commun/Lightbox';
 import { Camera, Filter } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -81,8 +81,8 @@ export default function GaleriePage() {
     );
   }, [selectedCategory, images, categories]);
 
-  // Use useEffect to reset category when language changes
-  useMemo(() => {
+  // Reset category when language changes
+  useEffect(() => {
     setSelectedCategory(categories[0]);
   }, [language, categories]);
 
@@ -122,8 +122,8 @@ export default function GaleriePage() {
               <button
                 key={category}
                 className={`px-5 py-2.5 rounded-xl font-medium transition-all duration-300 ${selectedCategory === category
-                    ? 'bg-teal-600 text-white shadow-lg shadow-teal-100 scale-105'
-                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100'
+                  ? 'bg-teal-600 text-white shadow-lg shadow-teal-100 scale-105'
+                  : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100'
                   }`}
                 onClick={() => setSelectedCategory(category)}
               >
