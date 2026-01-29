@@ -5,9 +5,10 @@ import { useLanguage } from '../../contexts/LanguageContext';
 
 export default function TargetAudience() {
   const { language } = useLanguage();
-  
+  const lang = (language && ["FR", "EN", "AR"].includes(language.toUpperCase())) ? language.toUpperCase() : "FR";
+
   const audiences = {
-    FR:[{
+    FR: [{
       icon: GraduationCap,
       title: "Jeunes diplômés & Chercheurs d'emploi",
       description: "Formations spécialisées, accompagnement à l'insertion professionnelle et développement de compétences adaptées au marché du travail.",
@@ -43,7 +44,7 @@ export default function TargetAudience() {
       cta: "Rejoindre la communauté",
       link: "/adhesion"
     }],
-    EN:[{
+    EN: [{
       icon: GraduationCap,
       title: "Recent graduates & Job seekers",
       description: "Specialized training, support for professional integration and development of skills adapted to the job market.",
@@ -79,46 +80,46 @@ export default function TargetAudience() {
       cta: "join the community",
       link: "/adhesion"
     }],
-    AR:[
+    AR: [
       {
-      icon: GraduationCap,
-      title: "الخريجون الجدد والباحثون عن عمل",
-      description: "التدريب المتخصص، ودعم الاندماج المهني، وتطوير المهارات الملائمة لسوق العمل.",
-      benefits: ["دورات تدريبية معتمدة"," وتوجيه مهني"," وشبكة علاقات مهنية","وفرص عمل"],
-      color: "blue",
-      cta: "اكتشف برامجنا التدريبية",
-      link: "/formations"
-    },
-    {
-      icon: Lightbulb,
-      title: "رواد الأعمال وقادة المشاريع",
-      description: "الاحتضان، والتدريب الشخصي، وجمع التبرعات، والدعم حتى نجاح مشاريعك الابتكارية.",
-      benefits: ["حضانة المشروع", "البحث عن التمويل", "توجيه الخبراء", "الشبكات"],
-      color: "yellow",
-      cta: "أقترح مشروعي",
-      link: "/contact"
-    },
-    {
-      icon: Building,
-      title: "المؤسسات والمجتمعات",
-      description: "الشراكات الاستراتيجية، والاستشارات في مجال التنمية المستدامة، والتعاون في مشاريع التأثير الإقليمي.",
-      benefits: ["الخبرة الاستشارية", "الشراكات المستدامة", "المشاريع الإقليمية", "تدريب الفريق"],
-      color: "teal",
-      cta: "كن شريكا",
-      link: "/contact"
-    },
-    {
-      icon: Heart,
-      title: "المواطنين المنخرطين",
-      description: "التوعية، والفعاليات التشاركية، وتعبئة المواطنين من أجل التنمية المستدامة والشاملة.",
-      benefits: ["أحداث حصرية", "مجتمع منخرط", "إجراءات ملموسة", "التأثير الجماعي"],
-      color: "green",
-      cta: "انضم إلى المجتمع",
-      link: "/adhesion"
-    }
+        icon: GraduationCap,
+        title: "الخريجون الجدد والباحثون عن عمل",
+        description: "التدريب المتخصص، ودعم الاندماج المهني، وتطوير المهارات الملائمة لسوق العمل.",
+        benefits: ["دورات تدريبية معتمدة", " وتوجيه مهني", " وشبكة علاقات مهنية", "وفرص عمل"],
+        color: "blue",
+        cta: "اكتشف برامجنا التدريبية",
+        link: "/formations"
+      },
+      {
+        icon: Lightbulb,
+        title: "رواد الأعمال وقادة المشاريع",
+        description: "الاحتضان، والتدريب الشخصي، وجمع التبرعات، والدعم حتى نجاح مشاريعك الابتكارية.",
+        benefits: ["حضانة المشروع", "البحث عن التمويل", "توجيه الخبراء", "الشبكات"],
+        color: "yellow",
+        cta: "أقترح مشروعي",
+        link: "/contact"
+      },
+      {
+        icon: Building,
+        title: "المؤسسات والمجتمعات",
+        description: "الشراكات الاستراتيجية، والاستشارات في مجال التنمية المستدامة، والتعاون في مشاريع التأثير الإقليمي.",
+        benefits: ["الخبرة الاستشارية", "الشراكات المستدامة", "المشاريع الإقليمية", "تدريب الفريق"],
+        color: "teal",
+        cta: "كن شريكا",
+        link: "/contact"
+      },
+      {
+        icon: Heart,
+        title: "المواطنين المنخرطين",
+        description: "التوعية، والفعاليات التشاركية، وتعبئة المواطنين من أجل التنمية المستدامة والشاملة.",
+        benefits: ["أحداث حصرية", "مجتمع منخرط", "إجراءات ملموسة", "التأثير الجماعي"],
+        color: "green",
+        cta: "انضم إلى المجتمع",
+        link: "/adhesion"
+      }
     ]
   };
-  const currentAudiences = audiences[language] || audiences.FR;
+  const currentAudiences = audiences[lang];
   const getColorClasses = (color) => {
     const colorMap = {
       blue: {
@@ -154,40 +155,40 @@ export default function TargetAudience() {
   };
 
   const StatsSection = {
-    h2E:{
-      FR:"À qui s'adresse le FMDD ?",
-      EN:"Who is the FMDD for?",
-      AR:"من هو FMDD؟"
+    h2E: {
+      FR: "À qui s'adresse le FMDD ?",
+      EN: "Who is the FMDD for?",
+      AR: "من هو FMDD؟"
     },
-    pE:{
-      FR:"Que vous soyez étudiant, entrepreneur, institution ou citoyen engagé, le FMDD vous accompagne dans votre démarche de développement durable.",
-      EN:"Whether you are a student, entrepreneur, institution, or engaged citizen, the FMDD supports you in your sustainable development journey.",
-      AR:"سواء كنت طالبًا أو رائد أعمال أو مؤسسة أو مواطنًا منخرطًا، فإن FMDD يدعمك في مسيرتك نحو التنمية المستدامة."
+    pE: {
+      FR: "Que vous soyez étudiant, entrepreneur, institution ou citoyen engagé, le FMDD vous accompagne dans votre démarche de développement durable.",
+      EN: "Whether you are a student, entrepreneur, institution, or engaged citizen, the FMDD supports you in your sustainable development journey.",
+      AR: "سواء كنت طالبًا أو رائد أعمال أو مؤسسة أو مواطنًا منخرطًا، فإن FMDD يدعمك في مسيرتك نحو التنمية المستدامة."
     },
-    h4A:{
-      FR:"Ce que nous vous offrons :",
-      EN:"What we offer you:",
-      AR:"ماذا نقدم لك:"
+    h4A: {
+      FR: "Ce que nous vous offrons :",
+      EN: "What we offer you:",
+      AR: "ماذا نقدم لك:"
     },
-    h3AG:{
-      FR:"Prêt à faire partie du changement ?",
-      EN:"Ready to be part of the change?",
-      AR:"هل أنت مستعد لتكون جزءًا من التغيير؟"
+    h3AG: {
+      FR: "Prêt à faire partie du changement ?",
+      EN: "Ready to be part of the change?",
+      AR: "هل أنت مستعد لتكون جزءًا من التغيير؟"
     },
-    pAG:{
-      FR:"Rejoignez une communauté dynamique d'acteurs du développement durable et contribuez à bâtir un avenir meilleur pour le Maroc.",
-      EN:"Join a dynamic community of sustainable development actors and help build a better future for Morocco.",
-      AR:"انضم إلى مجتمع ديناميكي من الفاعلين في التنمية المستدامة وساهم في بناء مستقبل أفضل للمغرب."
+    pAG: {
+      FR: "Rejoignez une communauté dynamique d'acteurs du développement durable et contribuez à bâtir un avenir meilleur pour le Maroc.",
+      EN: "Join a dynamic community of sustainable development actors and help build a better future for Morocco.",
+      AR: "انضم إلى مجتمع ديناميكي من الفاعلين في التنمية المستدامة وساهم في بناء مستقبل أفضل للمغرب."
     },
-    HeartAG:{
-      FR:"Devenir membre",
-      EN:"Become a member",
-      AR:"كن عضواً"
+    HeartAG: {
+      FR: "Devenir membre",
+      EN: "Become a member",
+      AR: "كن عضواً"
     },
-    ContactAG:{
-      FR:"Nous contacter",
-      EN:"Contact us",
-      AR:"اتصل بنا"
+    ContactAG: {
+      FR: "Nous contacter",
+      EN: "Contact us",
+      AR: "اتصل بنا"
     }
 
   }
@@ -196,7 +197,7 @@ export default function TargetAudience() {
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          
+
           {/* En-tête de section */}
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-blue-950 mb-4">
@@ -212,9 +213,9 @@ export default function TargetAudience() {
             {currentAudiences.map((audience, index) => {
               const colors = getColorClasses(audience.color);
               const IconComponent = audience.icon;
-              
+
               return (
-                <div 
+                <div
                   key={index}
                   className={`${colors.bg} rounded-2xl p-8 hover:shadow-lg transition-all duration-300 group`}
                 >
@@ -240,7 +241,7 @@ export default function TargetAudience() {
                     <h4 className="font-semibold text-blue-950 mb-3">{StatsSection.h4A[language] || StatsSection.h4A.FR}</h4>
                     <div className="flex flex-wrap gap-2">
                       {audience.benefits.map((benefit, idx) => (
-                        <span 
+                        <span
                           key={idx}
                           className={`px-3 py-1 ${colors.badgeBg} ${colors.badgeText} text-sm font-medium rounded-full`}
                         >
@@ -251,7 +252,7 @@ export default function TargetAudience() {
                   </div>
 
                   {/* Call to Action */}
-                  <Link 
+                  <Link
                     to={audience.link}
                     className={`inline-flex items-center px-6 py-3 ${colors.button} text-white font-semibold rounded-xl transition-all duration-300 transform group-hover:scale-105`}
                   >
