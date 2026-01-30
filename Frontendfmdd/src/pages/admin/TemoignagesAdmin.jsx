@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import axios from '../../axios';
-
+import api from '../../axios'; 
+import { API_ROUTES } from '../../config/api.config'; 
 const TemoignagesAdmin = () => {
   const [temoignages, setTemoignages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,39 +14,81 @@ const TemoignagesAdmin = () => {
   const fetchTemoignages = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/v1/temoignages');
-      setTemoignages(response.data.data ?? response.data);
+      const response = await api.get(API_ROUTES.temoignages.all); 
+      setTemoignages(response.data.data);
       setError(null);
     } catch (err) {
-      console.error(err);
+      console.error('Erreur admin:', err.response?.data || err.message);
       setError('Erreur lors du chargement des témoignages');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleStatusChange = async (id, statut) => {
-    try {
-      await axios.put(`/api/v1/temoignages/${id}`, { statut });
+const handleStatusChange = async (id, newStatus) => {
+  const oldTemoignages = [...temoignages];
+  const oldStatus = temoignages.find(t => t.id === id)?.statut;
+  setTemoignages(prev =>
+    prev.map(t =>
+      t.id === id ? { ...t, statut: newStatus } : t
+    )
+  );
 
-      setTemoignages(prev =>
-        prev.map(t => t.id === id ? { ...t, statut } : t)
-      );
-    } catch (err) {
-      console.error(err);
-      alert('Erreur lors de la mise à jour du statut');
+  try {
+    
+    let response;
+    if (newStatus === 'accepter') {
+      response = await api.post(API_ROUTES.temoignages.accept(id));
+    } else if (newStatus === 'refuser') {
+      response = await api.post(API_ROUTES.temoignages.reject(id));
+    } else {
+      response = await api.put(API_ROUTES.temoignages.update(id), { 
+        statut: newStatus 
+      });
     }
-  };
+
+  
+    console.log('Statut changé avec succès:', response.data);
+    
+    setError(null);
+    
+  } catch (err) {
+    console.error('Erreur API:', err);
+    
+    setTemoignages(oldTemoignages);
+    
+    setError(`Échec: ${err.response?.data?.message || err.message}`);
+    
+    setTimeout(() => {
+      fetchTemoignages(); 
+    }, 2000);
+  }
+};
 
   const handleDelete = async (id) => {
     if (!window.confirm('Supprimer ce témoignage ?')) return;
 
     try {
-      await axios.delete(`/api/v1/temoignages/${id}`);
+      await api.delete(API_ROUTES.temoignages.destroy(id));
       setTemoignages(prev => prev.filter(t => t.id !== id));
     } catch (err) {
       console.error(err);
       alert('Erreur lors de la suppression');
+    }
+  };
+
+  const getStatusClass = (statut) => {
+    switch (statut) {
+      case 'en_attente':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      case 'accepter':
+      case 'accepte':
+        return 'bg-green-100 text-green-800 border-green-300';
+      case 'refuser':
+      case 'refuse':
+        return 'bg-red-100 text-red-800 border-red-300';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-300';
     }
   };
 
@@ -60,67 +102,60 @@ const TemoignagesAdmin = () => {
       {error && <p className="text-red-600">{error}</p>}
 
       {!loading && !error && (
-        <table className="w-full" border={1}>
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-2">Auteur</th>
-              <th className="px-4 py-2">Poste</th>
-              <th className="px-4 py-2">Message</th>
-              <th className="px-4 py-2">Statut</th>
-              <th className="px-4 py-2">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {temoignages.length === 0 && (
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead className="bg-gray-100">
               <tr>
-                <td colSpan="5" className="text-center py-4">
-                  Aucun témoignage
-                </td>
+                <th className="px-4 py-2 text-left">Auteur</th>
+                <th className="px-4 py-2 text-left">Poste</th>
+                <th className="px-4 py-2 text-left">Message</th>
+                <th className="px-4 py-2 text-left">Statut</th>
+                <th className="px-4 py-2 text-left">Actions</th>
               </tr>
-            )}
+            </thead>
 
-            {temoignages.map(t => (
-              <tr key={t.id} className="border-b">
-                <td className="px-4 py-2">{t.nom}</td>
-                <td className="px-4 py-2">{t.poste ?? '-'}</td>
-                <td className="px-4 py-2">{t.message}</td>
+            <tbody>
+              {temoignages.length === 0 && (
+                <tr>
+                  <td colSpan="5" className="text-center py-4">
+                    Aucun témoignage
+                  </td>
+                </tr>
+              )}
 
-                <td className="px-4 py-2">
-                  <select
-                    value={t.statut}
-                    onChange={(e) =>
-                      handleStatusChange(t.id, e.target.value)
-                    }
-                    className={`border rounded px-2 py-1 text-sm transition-colors duration-200
-    ${
-      temoignages.statut === 'en_attente'
-        ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
-        : temoignages.statut === 'accepter'
-        ? 'bg-green-100 text-green-800 border-green-300'
-        : temoignages.statut === 'refuser'
-        ? 'bg-red-100 text-red-800 border-red-300'
-        : ''
-    }`}
-                  >
-                    <option value="en_attente">En attente</option>
-                    <option value="accepte">Accepter</option>
-                    <option value="refuse">Refusé</option>
-                  </select>
-                </td>
+              {temoignages.map(t => (
+                <tr key={t.id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-2">{t.nom}</td>
+                  <td className="px-4 py-2">{t.poste ?? '-'}</td>
+                  <td className="px-4 py-2 max-w-xs truncate">
+                    {t.message.substring(0, 80)}...
+                  </td>
 
-                <td className="px-4 py-2 space-x-2">
-                  <button
-                    onClick={() => handleDelete(t.id)}
-                    className="text-red-600"
-                  >
-                    Supprimer
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <td className="px-4 py-2">
+                    <select
+                      value={t.statut}
+                      onChange={(e) => handleStatusChange(t.id, e.target.value)}
+                      className={`border rounded px-2 py-1 text-sm transition-colors duration-200 ${getStatusClass(t.statut)}`}
+                    >
+                      <option value="en_attente">En attente</option>
+                      <option value="accepte">Accepter</option>
+                      <option value="refuser">Refuser</option>
+                    </select>
+                  </td>
+
+                  <td className="px-4 py-2 space-x-2">
+                    <button
+                      onClick={() => handleDelete(t.id)}
+                      className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700"
+                    >
+                      Supprimer
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

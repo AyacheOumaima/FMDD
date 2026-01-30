@@ -23,26 +23,28 @@ const TemoignagesPage = () => {
   const [error, setError] = useState(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
+useEffect(() => {
+  const fetchTemoignages = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('/api/v1/temoignages');
+      
+      const acceptedTestimonials = response.data.data.filter(t => 
+        t.statut === 'accepter' || t.statut === 'accepte' 
+      );
+      
+      setTemoignages(acceptedTestimonials);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError('Erreur lors du chargement des témoignages');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  useEffect(() => {
-    const fetchTemoignages = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get(API_ROUTES.temoignages.index);
-        const acceptedTestimonials = response.data.data.filter(t => t.statut === 'accepte');
-        setTemoignages(acceptedTestimonials);
-        setError(null);
-      } catch (err) {
-        console.error(err);
-        setError('Erreur lors du chargement des témoignages');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTemoignages();
-  }, []);
-
+  fetchTemoignages();
+}, []);
   const showToast = (message, type = 'success', duration = 3000) => {
     setToastMessage(message);
     setToastType(type);

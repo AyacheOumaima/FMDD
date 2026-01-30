@@ -51,7 +51,6 @@ const TestimonialCard = ({ quote, author, role }) => {
   );
 };
 
-// Hayedna l-image men hna hit mabqitch ghat-passiha
 TestimonialCard.propTypes = {
   quote: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,

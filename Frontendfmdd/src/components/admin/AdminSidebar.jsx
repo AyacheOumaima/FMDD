@@ -13,7 +13,6 @@ import {
   FileText,
   Info,
   User,
-
 } from 'lucide-react';
 import LogoutButton from './LogoutButton';
 
@@ -30,7 +29,7 @@ const AdminSidebar = () => {
     { path: 'evenements', icon: <Calendar className="w-5 h-5" />, label: 'Événements' },
     { path: 'insertions', icon: <FolderOpen className="w-5 h-5" />, label: 'Insertions' },
     { path: 'temoignages', icon: <MessageSquare className="w-5 h-5" />, label: 'Témoignages' },
-    { path: 'galerie', icon: <Image className="w-5 h-5" />, label: 'Galerie' },
+    // { path: 'galerie', icon: <Image className="w-5 h-5" />, label: 'Galerie' },
     { path: 'blog', icon: <FileText className="w-5 h-5" />, label: 'Blog' },
     { path: 'apropos', icon: <Info className="w-5 h-5" />, label: 'À propos' },
   ];
@@ -59,10 +58,12 @@ const AdminSidebar = () => {
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="relative">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-400 flex items-center justify-center"
-              onClick={() => navigate('/admin/edit-profile')} 
-  >
-                <User className="w-5 h-5 text-white" />
+            
+              <div 
+                  className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-400 flex items-center justify-center cursor-pointer"
+                  onClick={() => navigate('/admin/edit-profile')}
+                  >
+                    <User className="w-5 h-5 text-white" />
               </div>
               <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
             </div>

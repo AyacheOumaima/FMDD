@@ -100,6 +100,13 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::post('/insertions', [InsertionController::class, 'store']);
         Route::put('/insertions/{id}', [InsertionController::class, 'update']);
         Route::delete('/insertions/{id}', [InsertionController::class, 'destroy']);
+         // Routes Temoignages (Admin)
+        // Route::get('/temoignages', [TemoignageController::class, 'all']);
+            Route::get('/temoignages/all', [TemoignageController::class, 'all']); // Admin seulement
+            Route::post('/temoignages/{id}/accept', [TemoignageController::class, 'accept']);
+    Route::post('/temoignages/{id}/reject', [TemoignageController::class, 'reject']);
+        Route::put('/temoignages/{id}', [TemoignageController::class, 'update']);
+        Route::delete('/temoignages/{id}', [TemoignageController::class, 'destroy']);
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
     });
@@ -120,16 +127,12 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     // ✅ ROUTES ADMIN CORRIGÉES
     Route::middleware(['role:admin'])->group(function () {
         // Fix 1: Stats URL (Handle BOTH paths to be safe)
-        Route::get('/stats', [AdminController::class, 'stats']);       // api/v1/stats
-        Route::get('/admin/stats', [AdminController::class, 'stats']); // api/v1/admin/stats
+        Route::get('/stats', [AdminController::class, 'stats']);       
+        Route::get('/admin/stats', [AdminController::class, 'stats']); 
 
         // Fix 2: Resources (Map Frontend names to Backend Controllers)
         Route::apiResource('formations', FormationController::class);
-        Route::apiResource('insertions', InsertionController::class);
-        // Routes Temoignages (Admin)
-        Route::get('/temoignages', [TemoignageController::class, 'all']);
-        Route::put('/temoignages/{id}', [TemoignageController::class, 'update']);
-        Route::delete('/temoignages/{id}', [TemoignageController::class, 'destroy']);
+       
 
         // Route::apiResource('temoignages', TemoignageController::class);
         Route::apiResource('evenements', EventController::class); // Frontend calls it 'evenements'

@@ -58,7 +58,7 @@ const DashboardAdmin = () => {
     addNotification('Données du dashboard mises à jour', 'success');
   };
 
-  // Nouvelle palette de couleurs modernes
+ 
   const colorPalette = {
     primary: {
       bg: 'bg-gradient-to-r from-white-500 to-white-500',
@@ -82,7 +82,6 @@ const DashboardAdmin = () => {
 
   return (
     <div className="space-y-6 p-4 md:p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
-      {/* En-tête avec gradient moderne */}
       <div className={`rounded-2xl shadow-lg ${colorPalette.primary.bg} p-6`}>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="text-black">
@@ -103,7 +102,6 @@ const DashboardAdmin = () => {
         </div>
       </div>
 
-      {/* Statistiques globales avec cartes modernes */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { title: 'Projets', count: stats.projets?.length || 0, color: colorPalette.cardColors[0] },
@@ -130,9 +128,7 @@ const DashboardAdmin = () => {
         ))}
       </div>
 
-      {/* Contenu principal en deux colonnes */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Colonne gauche - Statistiques détaillées */}
         <div className="lg:col-span-2">
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex items-center justify-between mb-6">
@@ -143,9 +139,7 @@ const DashboardAdmin = () => {
           </div>
         </div>
 
-        {/* Colonne droite - Messages et Actions rapides */}
         <div className="space-y-6">
-          {/* Carte Messages */}
           <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-800">Messages</h2>
@@ -176,7 +170,6 @@ const DashboardAdmin = () => {
             </div>
           </div>
 
-          {/* Actions rapides */}
           <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-800">Actions rapides</h2>
@@ -230,7 +223,6 @@ const DashboardAdmin = () => {
   );
 };
 
-// Ajoutez ceci à votre fichier CSS global pour l'animation de rotation
 const globalStyles = `
 @keyframes spin-once {
   0% { transform: rotate(0deg); }

@@ -73,7 +73,6 @@ const handleSubmit = async (e) => {
       </h2>
 
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        {/* Poste */}
         <div className="mb-4">
           <label className="block mb-1 font-medium">Poste</label>
           <input
@@ -86,7 +85,6 @@ const handleSubmit = async (e) => {
           />
         </div>
 
-        {/* Entreprise */}
         <div className="mb-4">
           <label className="block mb-1 font-medium">Entreprise</label>
           <input
@@ -99,7 +97,6 @@ const handleSubmit = async (e) => {
           />
         </div>
 
-        {/* Ville */}
         <div className="mb-4">
           <label className="block mb-1 font-medium">Ville</label>
           <input
@@ -111,7 +108,6 @@ const handleSubmit = async (e) => {
           />
         </div>
 
-        {/* Date */}
         <div className="mb-4">
           <label className="block mb-1 font-medium">Date</label>
           <input
@@ -123,7 +119,6 @@ const handleSubmit = async (e) => {
           />
         </div>
 
-        {/* Type contrat */}
         <div className="mb-4">
           <label className="block mb-1 font-medium">Type de contrat</label>
           <select
@@ -140,7 +135,6 @@ const handleSubmit = async (e) => {
           </select>
         </div>
 
-        {/* Image */}
         <div className="mb-6">
           <label className="block mb-1 font-medium">Image</label>
           <input

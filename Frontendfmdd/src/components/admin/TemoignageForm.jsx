@@ -38,7 +38,6 @@ const TemoignageForm = ({ temoignage = null }) => {
     >
       {({ handleChange, formData }) => (
         <div>
-          {/* Informations de base */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -67,7 +66,6 @@ const TemoignageForm = ({ temoignage = null }) => {
             </div>
           </div>
 
-          {/* Contenu */}
           <div className="mt-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Contenu
@@ -82,7 +80,6 @@ const TemoignageForm = ({ temoignage = null }) => {
             />
           </div>
 
-          {/* Photo */}
           <div className="mt-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Photo
@@ -95,7 +92,6 @@ const TemoignageForm = ({ temoignage = null }) => {
             />
           </div>
 
-          {/* Statut */}
           <div className="mt-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Statut
@@ -112,7 +108,6 @@ const TemoignageForm = ({ temoignage = null }) => {
             </select>
           </div>
 
-          {/* Options */}
           <div className="mt-6">
             <div className="flex items-center">
               <input

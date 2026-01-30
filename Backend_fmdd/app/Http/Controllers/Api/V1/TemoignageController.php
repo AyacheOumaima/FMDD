@@ -14,7 +14,7 @@ class TemoignageController extends Controller
 
 public function index()
 {
-    $temoignages = Temoignage::where('statut', 'accepter')
+    $temoignages = Temoignage::where('statut', 'accepte')
         ->orderBy('created_at', 'desc')
         ->get();
 
@@ -42,12 +42,10 @@ public function index()
 
         $data = $validator->validated();
 
-        // Upload image si présente
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('temoignages', 'public');
         }
 
-        // Créer le témoignage
         $temoignage = Temoignage::create([
             'nom' => $data['nom'],
             'poste' => $data['poste'] ?? null,
@@ -66,17 +64,7 @@ public function index()
         ], 201);
     }
 
-    // Afficher un témoignage spécifique
-    public function show($id)
-    {
-        $temoignage = Temoignage::find($id);
-        if (!$temoignage) {
-            return response()->json(['message' => 'Non trouvé'], 404);
-        }
-        return response()->json(['data' => $temoignage]);
-    }
 
-    // Mettre à jour un témoignage (admin seulement)
     public function update(Request $request, $id)
     {
         $temoignage = Temoignage::find($id);
@@ -103,7 +91,6 @@ public function index()
         return response()->json(['status' => 'success', 'data' => $temoignage]);
     }
 
-    // Supprimer un témoignage (admin seulement)
     public function destroy($id)
     {
         $temoignage = Temoignage::find($id);
@@ -115,15 +102,54 @@ public function index()
 
         return response()->json(['message' => 'Supprimé avec succès']);
     }
-
-    // Lister tous les témoignages (admin seulement)
-    public function all()
-    {
-        $temoignages = Temoignage::latest()->get();
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $temoignages
-        ]);
+    public function all(Request $request) 
+{
+    if (!$request->user() || $request->user()->role !== 'admin') {
+        return response()->json(['message' => 'Unauthorized'], 401);
     }
+    
+    $temoignages = Temoignage::latest()->get();
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $temoignages
+    ]);
+}
+public function accept($id)
+{
+    $temoignage = Temoignage::find($id);
+    if (!$temoignage) {
+        return response()->json(['message' => 'Témoignage non trouvé'], 404);
+    }
+    
+    $temoignage->update([
+        'statut' => 'accepter',
+        'is_visible' => true
+    ]);
+    
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Témoignage accepté',
+        'data' => $temoignage
+    ]);
+}
+
+public function reject($id)
+{
+    $temoignage = Temoignage::find($id);
+    if (!$temoignage) {
+        return response()->json(['message' => 'Témoignage non trouvé'], 404);
+    }
+    
+    $temoignage->update([
+        'statut' => 'refuser',
+        'is_visible' => false
+    ]);
+    
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Témoignage refusé',
+        'data' => $temoignage
+    ]);
+}
 }

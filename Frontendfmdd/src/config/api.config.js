@@ -54,6 +54,10 @@ export const API_ROUTES = {
     show: (id) => `${API_PREFIX}/temoignages/${id}`,
     update: (id) => `${API_PREFIX}/temoignages/${id}`,
     destroy: (id) => `${API_PREFIX}/temoignages/${id}`,
+     // ! AJOUTER POUR ADMIN:
+        all: `${API_PREFIX}/temoignages/all`,
+        accept: (id) => `${API_PREFIX}/temoignages/${id}/accept`,
+        reject: (id) => `${API_PREFIX}/temoignages/${id}/reject`,
 },
 
     paiements: {

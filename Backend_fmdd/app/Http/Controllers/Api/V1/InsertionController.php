@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class InsertionController extends Controller
 {
-    // -------------------------
-    // Liste toutes les insertions
-    // -------------------------
+
     public function index()
     {
         $insertions = Insertion::latest()->get();
@@ -21,14 +19,11 @@ class InsertionController extends Controller
         ]);
     }
 
-    // -------------------------
-    // Créer une nouvelle insertion
-    // -------------------------
+
     public function store(Request $request)
     {
         $input = $request->all();
 
-        // gérer image
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '_' . $file->getClientOriginalName();
@@ -36,7 +31,6 @@ class InsertionController extends Controller
             $input['image'] = $filename;
         }
 
-        // validator
         $validator = Validator::make($input, [
             'poste' => 'required|string|max:255',
             'entreprise' => 'required|string|max:255',
@@ -60,9 +54,7 @@ class InsertionController extends Controller
         ], 201);
     }
 
-    // -------------------------
-    // Afficher une insertion
-    // -------------------------
+  
     public function show($id)
     {
         $insertion = Insertion::find($id);
@@ -73,9 +65,6 @@ class InsertionController extends Controller
         return response()->json(['data' => $insertion]);
     }
 
-    // -------------------------
-    // Mettre à jour une insertion
-    // -------------------------
     public function update(Request $request, $id)
     {
         $insertion = Insertion::find($id);
@@ -85,7 +74,6 @@ class InsertionController extends Controller
 
         $input = $request->all();
 
-        // gérer image
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '_' . $file->getClientOriginalName();
@@ -94,7 +82,6 @@ class InsertionController extends Controller
         }
 
       
-        // validator
         $validator = Validator::make($input, [
             'poste' => 'required|string|max:255',
             'entreprise' => 'required|string|max:255',
@@ -118,9 +105,6 @@ class InsertionController extends Controller
         ]);
     }
 
-    // -------------------------
-    // Supprimer une insertion
-    // -------------------------
     public function destroy($id)
     {
         $insertion = Insertion::find($id);
