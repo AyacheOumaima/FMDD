@@ -5,7 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 const STATIC_GALLERY_IMAGES = {
   FR: [
-    { id: 1, src: "https://images.unsplash.com/photo-1539437829698-1ea40963f29d?auto=format&fit=crop&q=80&w=1200", titre: "Agriculture Durable", alt: "Agriculture Durable à travers le Maroc", categories: ["Environnement", "Terrain"] },
+    { id: 1, src: "https://lematin.ma/lematin/uploads/images/2025/05/27/412055.webp", titre: "Agriculture Durable", alt: "Agriculture Durable à travers le Maroc", categories: ["Environnement", "Terrain"] },
     { id: 2, src: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=1200", titre: "Innovation Sociale", alt: "Ateliers d'innovation sociale", categories: ["Social", "Ateliers"] },
     { id: 3, src: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1200", titre: "Formation & Capacité", alt: "Sessions de formation FMDD", categories: ["Formation"] },
     { id: 4, src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRVU-W94CbY15UYSV8ZnSMVK18VERadvGrLQ&s", titre: "Énergies Renouvelables", alt: "Promotion des énergies vertes", categories: ["Environnement"] },
@@ -15,7 +15,7 @@ const STATIC_GALLERY_IMAGES = {
     { id: 8, src: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1200", titre: "Équipe Innovation", alt: "L'équipe FMDD en action", categories: ["Social"] }
   ],
   EN: [
-    { id: 1, src: "https://images.unsplash.com/photo-1539437829698-1ea40963f29d?auto=format&fit=crop&q=80&w=1200", titre: "Sustainable Agriculture", alt: "Sustainable Agriculture across Morocco", categories: ["Environment", "Field"] },
+    { id: 1, src: "https://lematin.ma/lematin/uploads/images/2025/05/27/412055.webp", titre: "Sustainable Agriculture", alt: "Sustainable Agriculture across Morocco", categories: ["Environment", "Field"] },
     { id: 2, src: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=1200", titre: "Social Innovation", alt: "Social innovation workshops", categories: ["Social", "Workshops"] },
     { id: 3, src: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1200", titre: "Training & Capacity", alt: "FMDD training sessions", categories: ["Training"] },
     { id: 4, src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRVU-W94CbY15UYSV8ZnSMVK18VERadvGrLQ&s", titre: "Renewable Energy", alt: "Promotion of green energy", categories: ["Environment"] },
@@ -25,7 +25,7 @@ const STATIC_GALLERY_IMAGES = {
     { id: 8, src: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1200", titre: "Innovation Team", alt: "FMDD team in action", categories: ["Social"] }
   ],
   AR: [
-    { id: 1, src: "https://images.unsplash.com/photo-1539437829698-1ea40963f29d?auto=format&fit=crop&q=80&w=1200", titre: "الزراعة المستدامة", alt: "الزراعة المستدامة في جميع أنحاء المغرب", categories: ["البيئة", "الميدان"] },
+    { id: 1, src: "https://lematin.ma/lematin/uploads/images/2025/05/27/412055.webp", titre: "الزراعة المستدامة", alt: "الزراعة المستدامة في جميع أنحاء المغرب", categories: ["البيئة", "الميدان"] },
     { id: 2, src: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=1200", titre: "الابتكار الاجتماعي", alt: "ورش عمل الابتكار الاجتماعي", categories: ["اجتماعي", "ورش عمل"] },
     { id: 3, src: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1200", titre: "التدريب والقدرات", alt: "دورات تدريبية FMDD", categories: ["تدريب"] },
     { id: 4, src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRVU-W94CbY15UYSV8ZnSMVK18VERadvGrLQ&s", titre: "الطاقة المتجددة", alt: "تعزيز الطاقة الخضراء", categories: ["البيئة"] },
