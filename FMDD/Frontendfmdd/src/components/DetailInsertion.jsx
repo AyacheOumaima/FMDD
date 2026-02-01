@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import { Briefcase, MapPin, DollarSign, Clock } from 'lucide-react';
 import axios from 'axios';
+import { useLanguage } from '../contexts/LanguageContext';
+
 
 export default function OffreEmploi() {
   const [showForm, setShowForm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { language } = useLanguage();
+  const lang = (language && ["FR", "EN", "AR"].includes(language.toUpperCase())) ? language.toUpperCase() : "FR";
+
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
@@ -17,6 +22,93 @@ export default function OffreEmploi() {
     lettre_motivation: '',
     cv: null,
   });
+
+  const detaillinsertionData = {
+    FR: {
+      behindLink: "← Retour",
+      companyName: "Nom de l'entreprise",
+      jobTitle: "Intitulé du poste",
+      contratType: "CDI",
+      salary: "3500 MAD",
+      city: "Casablanca",
+      experienceYears: "2 ans d'expérience",
+      postDescriptionTitle:"Description du poste",
+      profilSearchdTitle:"Profil recherché",
+      postDescription: "Nous recherchons un développeur passionné pour rejoindre notre équipe et contribuer à des projets innovants.",
+      profilSearchd: "Titulaire d'un Bac+3 minimum, vous justifiez d'une première expérience en développement web.",
+      postintresing: "Ce poste vous intéresse ?",
+      postuled: "Postuler",
+      candidature: "Candidature",
+      lastName: "Nom",
+      firstName: "Prénom",
+      email: "Email",
+      phoneNumber: "Téléphone",
+      formationDiplomat: "Formation/Diplôme",
+      experience: "Expérience Professionnelle",
+      lettreMotivation: "Lettre de motivation",
+      cv: "CV (PDF ou DOCX)",
+      loadingTrue: "Envoi en cours...",
+      loadingFalse: "Envoyer ma candidature",
+      msg: "✅ Votre candidature a été envoyée avec succès !"
+    },
+    EN: {
+      behindLink: "← Return",
+      companyName: "Company Name",
+      jobTitle: "Job Title",
+      contratType: "CDI",
+      salary: "3500 MAD",
+      city: "Casablanca",
+      experienceYears: "2 years of experience",
+      postDescriptionTitle: "Job Description",
+      profilSearchdTitle: "Profile recherché",
+      postDescription: "We are looking for a passionate developer to join our team and contribute to innovative projects.",
+      profilSearchd: "Holder of a Bac+3 minimum, you have a first experience in web development.",
+      postintresing: "This position interests you?",
+      postuled: "Apply",
+      candidature: "Application",
+      lastName: "Last Name",
+      firstName: "First Name",
+      email: "Email",
+      phoneNumber: "Phone Number",
+      formationDiplomat: "Training/Diploma",
+      experience: "Professional Experience",
+      lettreMotivation: "Cover Letter",
+      cv: "CV (PDF or DOCX)",
+      loadingTrue: "Sending...",
+      loadingFalse: "Send my application",
+      msg: "✅ Your application has been sent successfully!"
+    },
+    AR: {
+      behindLink: "← العودة",
+      companyName: "اسم الشركة",
+      jobTitle: "عنوان الوظيفة",
+      contratType: "CDI",
+      salary: "3500 درهم",
+      city: "الدار البيضاء",
+      experienceYears: "سنتان من الخبرة",
+      postDescriptionTitle: "وصف الوظيفة",
+      profilSearchdTitle: "الملف الشخصي المطلوب",
+      postDescription: "نبحث عن مطور شغوف للانضمام إلى فريقنا والمساهمة في مشاريع مبتكرة.",
+      profilSearchd: "حاصل على شهادة Bac+3 كحد أدنى، ولديك خبرة أولى في تطوير الويب.",
+      postintresing: "هل يهمك هذا المنصب؟",
+      postuled: "قدم",
+      candidature: "طلب",
+      lastName: "الاسم",
+      firstName: "الاسم الأول",
+      email: "البريد الإلكتروني",
+      phoneNumber: "رقم الهاتف",
+      formationDiplomat: "التدريب/الشهادة",
+      experience: "الخبرة المهنية",
+      lettreMotivation: "رسالة الدافع",
+      cv: "السيرة الذاتية (PDF أو DOCX)",
+      loadingTrue: "جاري الإرسال...",
+      loadingFalse: "أرسل طلبي",
+      msg: "✅ تم إرسال طلبك بنجاح!"
+    }
+  }
+
+  const t = detaillinsertionData[lang];
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -89,7 +181,7 @@ export default function OffreEmploi() {
           onClick={() => window.history.back()}
           className="inline-block bg-[#00A99D] text-[#13335F] px-4 py-2 rounded-full text-sm"
         >
-          ← Retour
+          {t.behindLink}
         </a>
       </div>
 
@@ -102,27 +194,27 @@ export default function OffreEmploi() {
             className="w-16 h-16 object-contain"
           />
           <div>
-            <h2 className="text-xl font-bold text-[#13335F]">Nom de l'entreprise</h2>
-            <p className="text-[#13335F] text-lg">Intitulé du poste</p>
+            <h2 className="text-xl font-bold text-[#13335F]">{t.companyName}</h2>
+            <p className="text-[#13335F] text-lg">{t.jobTitle}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div className="flex items-center space-x-2">
             <Briefcase color="#FFB347" />
-            <span>CDI</span>
+            <span>{t.contratType}</span>
           </div>
           <div className="flex items-center space-x-2">
             <DollarSign color="#FFB347" />
-            <span>3500 MAD</span>
+            <span>{t.salary}</span>
           </div>
           <div className="flex items-center space-x-2">
             <MapPin color="#FFB347" />
-            <span>Casablanca</span>
+            <span>{t.city}</span>
           </div>
           <div className="flex items-center space-x-2">
             <Clock color="#FFB347" />
-            <span>2 ans d'expérience</span>
+            <span>{t.experienceYears}</span>
           </div>
         </div>
       </div>
@@ -130,29 +222,29 @@ export default function OffreEmploi() {
       {/* 📋 Description & Profil */}
       <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
         <div>
-          <h3 className="text-xl font-bold text-[#13335F] mb-2">Description du poste</h3>
+          <h3 className="text-xl font-bold text-[#13335F] mb-2">{t.postDescriptionTitle}</h3>
           <p>
-            Nous recherchons un développeur passionné pour rejoindre notre équipe et contribuer à des projets innovants.
+            {t.postDescription}
           </p>
         </div>
         <div>
-          <h3 className="text-xl font-bold text-[#13335F] mb-2">Profil recherché</h3>
+          <h3 className="text-xl font-bold text-[#13335F] mb-2">{t.profilSearchdTitle}</h3>
           <p>
-            Titulaire d'un Bac+3 minimum, vous justifiez d'une première expérience en développement web.
+            {t.profilSearchd}
           </p>
         </div>
       </div>
 
       {/* 📩 Section de candidature */}
       <div className="text-center">
-        <h4 className="text-[#00A99D] text-xl font-semibold mb-4">Ce poste vous intéresse ?</h4>
+        <h4 className="text-[#00A99D] text-xl font-semibold mb-4">{t.postintresing}</h4>
 
         {!showForm && !submitted && (
           <button
             onClick={() => setShowForm(true)}
             className="bg-[#FFB347] text-[#13335F] font-semibold px-6 py-2 rounded hover:opacity-90 transition"
           >
-            Postuler
+            {t.postuled}
           </button>
         )}
 
@@ -163,7 +255,7 @@ export default function OffreEmploi() {
               onSubmit={handleSubmit}
               className="bg-white shadow-md rounded-xl p-6 w-full max-w-md"
             >
-              <h2 className="text-2xl font-bold text-center text-[#13335F] mb-6">Candidature</h2>
+              <h2 className="text-2xl font-bold text-center text-[#13335F] mb-6">{t.candidature}</h2>
 
               {error && (
                 <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
@@ -174,7 +266,7 @@ export default function OffreEmploi() {
               {/* NOM */}
               <div className="mb-4">
                 <label className="block text-[#13335F] font-medium text-lg mb-1" htmlFor="nom">
-                  Nom
+                  {t.lastName}
                 </label>
                 <input
                   type="text"
@@ -190,7 +282,7 @@ export default function OffreEmploi() {
               {/* PRENOM */}
               <div className="mb-4">
                 <label className="block text-[#13335F] font-medium text-lg mb-1" htmlFor="prenom">
-                  Prénom
+                  {t.firstName}
                 </label>
                 <input
                   type="text"
@@ -206,7 +298,7 @@ export default function OffreEmploi() {
               {/* EMAIL */}
               <div className="mb-4">
                 <label className="block text-[#13335F] font-medium text-lg mb-1" htmlFor="email">
-                  Email
+                  {t.email}
                 </label>
                 <input
                   type="email"
@@ -222,7 +314,7 @@ export default function OffreEmploi() {
               {/* TELEPHONE */}
               <div className="mb-4">
                 <label className="block text-[#13335F] font-medium text-lg mb-1" htmlFor="telephone">
-                  Téléphone
+                  {t.phoneNumber}
                 </label>
                 <input
                   type="tel"
@@ -238,7 +330,7 @@ export default function OffreEmploi() {
               {/* FORMATION */}
               <div className="mb-4">
                 <label className="block text-[#13335F] font-medium text-lg mb-1" htmlFor="formation">
-                  Formation/Diplôme
+                  {t.formationDiplomat}
                 </label>
                 <input
                   type="text"
@@ -255,7 +347,7 @@ export default function OffreEmploi() {
               {/* EXPÉRIENCE */}
               <div className="mb-4">
                 <label className="block text-[#13335F] font-medium text-lg mb-1" htmlFor="experience">
-                  Expérience Professionnelle
+                  {t.experience}
                 </label>
                 <textarea
                   id="experience"
@@ -271,7 +363,7 @@ export default function OffreEmploi() {
               {/* LETTRE DE MOTIVATION */}
               <div className="mb-4">
                 <label className="block text-[#13335F] font-medium text-lg mb-1" htmlFor="lettre_motivation">
-                  Lettre de motivation
+                  {t.lettreMotivation}
                 </label>
                 <textarea
                   id="lettre_motivation"
@@ -287,7 +379,7 @@ export default function OffreEmploi() {
               {/* CV */}
               <div className="mb-6">
                 <label className="block text-[#13335F] font-medium text-lg mb-1" htmlFor="cv">
-                  CV (PDF ou DOCX)
+                  {t.cv}
                 </label>
                 <input
                   type="file"
@@ -304,11 +396,10 @@ export default function OffreEmploi() {
               <button
                 type="submit"
                 disabled={loading}
-                className={`bg-[#FFB347] text-white font-semibold px-6 py-2 rounded hover:bg-[#e0a033] transition w-full ${
-                  loading ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
+                className={`bg-[#FFB347] text-white font-semibold px-6 py-2 rounded hover:bg-[#e0a033] transition w-full ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
               >
-                {loading ? 'Envoi en cours...' : 'Envoyer ma candidature'}
+                {loading ? t.loadingTrue : t.loadingFalse}
               </button>
             </form>
           </div>
@@ -317,7 +408,7 @@ export default function OffreEmploi() {
         {/* Message succès */}
         {submitted && (
           <div className="mt-6 p-4 bg-green-100 text-green-800 border border-green-300 rounded">
-            ✅ Votre candidature a été envoyée avec succès !
+            {t.msg}
           </div>
         )}
       </div>

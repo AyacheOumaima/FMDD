@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, User, Tag } from 'lucide-react';
+import { Calendar, User } from 'lucide-react';
 
 // Fonction pour formater la date de manière cohérente
 const formatDate = (dateString) => {
@@ -39,14 +39,14 @@ export default function BlogCard({ slug, title, excerpt, date, author, image, ta
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
-        
+
         <div className="p-5 flex-1 flex flex-col">
           <div className="mb-3">
             {tags && tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mb-3">
                 {tags.slice(0, 3).map((tag, index) => (
-                  <span 
-                    key={index} 
+                  <span
+                    key={index}
                     className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
                   >
                     {tag}
@@ -60,13 +60,13 @@ export default function BlogCard({ slug, title, excerpt, date, author, image, ta
               </div>
             )}
           </div>
-          
+
           <h3 className="font-bold text-xl text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
             {title}
           </h3>
-          
+
           <p className="text-gray-600 mb-4 line-clamp-3 flex-grow">{excerpt}</p>
-          
+
           <div className="mt-4 pt-4 border-t border-gray-100">
             <div className="flex items-center justify-between text-sm text-gray-500">
               <div className="flex items-center">
@@ -81,7 +81,7 @@ export default function BlogCard({ slug, title, excerpt, date, author, image, ta
               </div>
             </div>
           </div>
-          
+
           <div className="mt-4 pt-2 border-t border-gray-100">
             <span className="inline-flex items-center text-blue-600 font-medium text-sm group-hover:underline">
               Lire l'article

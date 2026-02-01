@@ -1,8 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import ProjetCard from '../components/ProjetCard';
 import api from '../axios'; // IMPORTZ VOTRE INSTANCE CONFIGURÉE (comme dans Admin)
+import { useLanguage } from '../contexts/LanguageContext';
 
 const normalize = (str) =>
+  
+
   str
     ?.toLowerCase()
     .normalize('NFD')
@@ -35,6 +38,26 @@ const ProjetsPage = () => {
   }, []);
 
   const displayedProjects = useMemo(() => {
+    const { language } = useLanguage();
+    const t = TRANSLATIONS[language] || TRANSLATIONS.FR;
+    const TRANSLATIONS = {
+      Fr : {
+        loading : "Chargement des projets...",
+        empty : "Aucun projet trouvé",
+        prjSearch : "Rechercher un projet...",
+
+      },
+      En : {
+        loading : "Loading projects...",
+        empty : "No projects found",
+        prjSearch : "Search for a project...",
+      },
+      Ar : {
+        loading : "تحميل المشاريع...",
+        empty : "لا يوجد مشاريع",
+        prjSearch : "بحث عن مشروع...",
+      }
+    }
     if (!search) return projects;
     const term = normalize(search);
 
@@ -54,7 +77,7 @@ const ProjetsPage = () => {
   }, [projects, search]);
 
   if (loading) {
-    return <p className="text-center mt-20">Chargement des projets...</p>;
+    return <p className="text-center mt-20">{t.loading}</p>;
   }
 
   if (error) {
@@ -66,7 +89,7 @@ const ProjetsPage = () => {
       {/* Search */}
       <input
         type="text"
-        placeholder="Rechercher un projet..."
+        placeholder={t.prjSearch}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="mb-8 w-full md:w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:ring"
@@ -81,7 +104,7 @@ const ProjetsPage = () => {
 
       {displayedProjects.length === 0 && (
         <p className="text-center text-gray-500 mt-10">
-          Aucun projet trouvé.
+          {t.empty}
         </p>
       )}
     </section>

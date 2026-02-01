@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Utilisateur simulé
 const fakeUser = {
@@ -15,6 +16,33 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const t = translateData[language] || translateData.fr;
+
+  const translateData = {
+    fr: {
+      login: "Connexion",
+      email: "Email",
+      password: "Mot de passe",
+      submit: "Se connecter",
+      signup: "Pas de compte ? Créer un compte",
+    },
+    en: {
+      login: "Login",
+      email: "Email",
+      password: "Password",
+      submit: "Login",
+      signup: "No account ? Create an account",
+    },
+    ar: {
+      login: "تسجيل الدخول",
+      email: "البريد الإلكتروني",
+      password: "كلمة المرور",
+      submit: "تسجيل الدخول",
+      signup: "ليس لديك حساب؟ إنشاء حساب",
+    },
+  };
+
 
   // Validation des champs
   const validate = () => {
@@ -47,15 +75,15 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg space-y-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-[#13335F]">Connexion</h1>
-          <p className="text-gray-600 mt-2">Simulez votre authentification</p>
+          <h1 className="text-3xl font-bold text-[#13335F]">{t.login}</h1>
+          <p className="text-gray-600 mt-2">{t.subtitle}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {errors.global && <p className="text-red-500 text-sm">{errors.global}</p>}
 
           <div>
-            <label className="block text-gray-700 mb-1">Email</label>
+            <label className="block text-gray-700 mb-1">{t.email}</label>
             <input
               type="email"
               value={email}
@@ -67,7 +95,7 @@ const LoginPage = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 mb-1">Mot de passe</label>
+            <label className="block text-gray-700 mb-1">{t.password}</label>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -91,13 +119,13 @@ const LoginPage = () => {
             type="submit"
             className="w-full bg-[#00A99D] text-white p-3 rounded-md hover:bg-[#019286]"
           >
-            Se connecter
+            {t.submit}
           </button>
 
           <p className="text-center text-sm text-gray-600">
-            Pas de compte ?{' '}
+            {t.signup} ?{' '}
             <Link to="/signup" className="text-[#FFB347] hover:underline">
-              Créer un compte
+              {t.signup}
             </Link>
           </p>
         </form>
