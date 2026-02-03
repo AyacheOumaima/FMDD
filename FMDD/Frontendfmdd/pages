@@ -1,0 +1,66 @@
+import React, { useState } from 'react';
+import axios from '../../axios';
+
+const AdminForm = ({ onSubmit, onCancel, title, initialValues = {}, children }) => {
+  const [formData, setFormData] = useState(initialValues);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      await onSubmit(formData);
+      // Redirection ou autre action après succès
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="bg-white shadow rounded-lg p-6">
+      <h2 className="text-2xl font-bold text-blue-800 mb-6">{title}</h2>
+
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {children({ handleChange, formData })}
+        
+        <div className="flex justify-end space-x-4">
+          <button 
+            type="button" 
+            onClick={onCancel}
+            className="px-4 py-2 border rounded hover:bg-gray-50"
+          >
+            Annuler
+          </button>
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="bg-blue-800 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          >
+            {loading ? 'Enregistrement...' : 'Enregistrer'}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default AdminForm;
