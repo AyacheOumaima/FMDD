@@ -8,7 +8,7 @@ const GALLERY_DATA = {
   FR: [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1539437829698-1ea40963f29d?auto=format&fit=crop&q=80&w=800",
+      image: "https://lematin.ma/lematin/uploads/images/2025/05/27/412055.webp",
       titre: "Agriculture Durable",
       description: "Accompagnement des coopératives locales dans le développement de pratiques agricoles durables."
     },
@@ -34,7 +34,7 @@ const GALLERY_DATA = {
   EN: [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1539437829698-1ea40963f29d?auto=format&fit=crop&q=80&w=800",
+      image: "https://lematin.ma/lematin/uploads/images/2025/05/27/412055.webp",
       titre: "Sustainable Agriculture",
       description: "Supporting local cooperatives in developing sustainable agricultural practices."
     },
@@ -60,7 +60,7 @@ const GALLERY_DATA = {
   AR: [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1539437829698-1ea40963f29d?auto=format&fit=crop&q=80&w=800",
+      image: "https://lematin.ma/lematin/uploads/images/2025/05/27/412055.webp",
       titre: "الزراعة المستدامة",
       description: "دعم التعاونيات المحلية في تطوير ممارسات زراعية مستدامة."
     },
