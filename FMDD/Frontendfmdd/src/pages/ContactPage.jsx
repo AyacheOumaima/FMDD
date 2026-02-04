@@ -766,12 +766,7 @@ export default function ContactPage() {
                   </div>
 
                   {/* Localisation Section */}
-                  <div>
-                    <h2 className="text-2xl font-poppins font-bold text-blue-950 mb-6">
-                      {t.localization}
-                    </h2>
-                    <Localisation />
-                  </div>
+                  
                 </div>
               </div>
             </>
