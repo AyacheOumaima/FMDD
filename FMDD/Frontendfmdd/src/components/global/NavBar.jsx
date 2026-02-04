@@ -40,6 +40,8 @@ function Dropdown({ title, links, isActive, onLinkClick }) {
 const Navbar = memo(() => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
+
 
   const { isAuthenticated, user, logout } = useAuth();
   const { language, setLanguage } = useLanguage();
@@ -227,28 +229,45 @@ const Navbar = memo(() => {
 
             {/* USER */}
             {isAuthenticated ? (
-              <div className="relative group">
-                <img
-                  src={user?.image || defaultAvatar}
-                  onError={e => (e.currentTarget.src = defaultAvatar)}
-                  className="h-9 w-9 rounded-full object-cover cursor-pointer border"
-                />
-                <div className="absolute right-0 mt-3 w-44 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition z-50">
-                  <Link
-                    to={dashboardLink}
-                    className="block text-black px-4 py-2 hover:bg-teal-500 hover:text-white"
-                  >
-                    {t[language].profile}
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-black text-left px-4 py-2 hover:bg-red-500 hover:text-white"
-                  >
-                    {t[language].logout}
-                  </button>
-                </div>
-              </div>
-            ) : (
+  <div className="relative">
+  <img
+    src={user?.image || defaultAvatar}
+    onError={e => (e.currentTarget.src = defaultAvatar)}
+    onClick={(e) => {
+      e.stopPropagation();
+      setUserOpen(!userOpen);
+    }}
+    className="h-9 w-9 rounded-full object-cover cursor-pointer border"
+  />
+
+  {userOpen && (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="absolute right-0 mt-3 w-44 bg-white rounded-xl shadow-xl z-50"
+    >
+      <Link
+        to={dashboardLink}
+        onClick={() => setUserOpen(false)}
+        className="block text-black px-4 py-2 hover:bg-teal-500 hover:text-white"
+      >
+        {t[language].profile}
+      </Link>
+
+      <button
+        onClick={() => {
+          handleLogout();
+          setUserOpen(false);
+        }}
+        className="w-full text-black text-left px-4 py-2 hover:bg-red-500 hover:text-white"
+      >
+        {t[language].logout}
+      </button>
+    </div>
+  )}
+</div>
+
+) : (
+
               <Link
                 to="/login"
                 className="bg-yellow-500 text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-500 transition flex items-center gap-1"
