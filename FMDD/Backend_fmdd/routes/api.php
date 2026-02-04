@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\AproposController;
 use App\Http\Controllers\Api\V1\BlogController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\Api\V1\AdherentController;
+use App\Http\Controllers\Api\V1\Admin\AdminBlogController;
 use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\EventController;
 use App\Http\Controllers\Api\V1\EventRegistrationController;
@@ -101,6 +102,11 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
    Route::middleware('role:admin')->prefix('admin')->group(function () {
         Route::apiResource('projets', ProjetController::class)->except(['index','show']);
+Route::get('/blog', [AdminBlogController::class, 'index']);
+Route::delete('/blog/{id}', [AdminBlogController::class, 'destroy']);
+Route::get('/blog/{id}', [AdminBlogController::class, 'show']);
+Route::put('/blog/{id}', [AdminBlogController::class, 'update']);
+
     });
     Route::prefix('adherent')->group(function () {
         Route::get('/profile', [AdherentController::class, 'profile']);
@@ -169,7 +175,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::middleware(['role:admin'])->prefix('blog')->group(function () {
         Route::post('/', [BlogController::class, 'store']);
         Route::put('/{id}', [BlogController::class, 'update']);
-        Route::delete('/{id}', [BlogController::class, 'destroy']);
+        
     });
 
     Route::middleware(['role:admin'])->group(function () {

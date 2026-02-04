@@ -1,60 +1,103 @@
+// src/components/admin/BlogPostForm.jsx
 import React from 'react';
 import AdminForm from './AdminForm';
-import { useNavigate, useLocation } from 'react-router-dom';
-
-const BlogPostForm = ({ article = null }) => {
+import { useNavigate } from 'react-router-dom';
+import api from '../../axios';
+import { useParams } from 'react-router-dom';
+import {useState,useEffect} from 'react';
+const BlogPostForm = () => {
+   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-  const isEditing = article !== null;
-  const initialValues = article || {
-    titre: '',
-    auteur: '',
-    contenu: '',
-    image: '',
-    categorie: '',
-    tags: [],
-    statut: 'brouillon',
-    is_a_la_une: false
-  };
+  const isEditing = !!id;
 
-  const handleSubmit = async (formData) => {
-    const url = isEditing 
-      ? `/admin/blog/${article.id}` 
-      : '/admin/blog';
-    const method = isEditing ? 'PUT' : 'POST';
-    
-    try {
-      await axios[method.toLowerCase()](url, formData);
-      navigate('/admin/blog');
-    } catch (error) {
-      throw error;
+const [article, setArticle] = useState(null);
+const [loading, setLoading] = useState(false);
+
+useEffect(() => {
+  if (isEditing) {
+    fetchArticle();
+  }
+}, [id]);
+
+const fetchArticle = async () => {
+  try {
+    setLoading(true);
+    const res = await api.get(`/api/v1/admin/blog/${id}`);
+    setArticle(res.data.article);
+  } catch (err) {
+    console.error(err);
+    alert("Erreur chargement article");
+    navigate('/admin/blog');
+  } finally {
+    setLoading(false);
+  }
+
+};
+const initialValues = article
+  ? {
+      ...article,
+      tags: Array.isArray(article.tags)
+        ? article.tags.join(', ')
+        : article.tags || ''
     }
-  };
+  : {
+      resume: '',
+      titre: '',
+      auteur: '',
+      contenu: '',
+      image: null,
+      categorie: '',
+      tags: '',
+      statut: '',
+      is_a_la_une: false
+    };
 
-  const handleTagChange = (e) => {
-    const { value } = e.target;
-    const newTags = value.split(',').map(tag => tag.trim());
-    setFormData(prev => ({
-      ...prev,
-      tags: newTags
-    }));
-  };
+
+ const handleSubmit = async (formData) => {
+  const data = new FormData();
+  
+  // On remplit le FormData
+  Object.keys(formData).forEach(key => {
+    if (key === 'tags' && Array.isArray(formData[key])) {
+      // Si c'est un tableau, on le joint par des virgules pour le contrôleur PHP
+      data.append(key, formData[key].join(', '));
+    } else if (formData[key] !== null) {
+      data.append(key, formData[key]);
+    }
+  });
+
+  try {
+    if (isEditing) {
+      // Pour Laravel, pour envoyer des fichiers en PUT, on utilise POST + _method=PUT
+      data.append('_method', 'PUT');
+      await api.post(`/api/v1/admin/blog/${article.id}`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+    } else {
+      // Création : api/v1/blog
+      await api.post('/api/v1/blog', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+    }
+    navigate('/admin/blog');
+  } catch (error) {
+    console.error("Erreur détails:", error.response?.data);
+    alert(error.response?.data?.message || "Erreur lors de l'enregistrement");
+  }
+};
 
   return (
     <AdminForm 
       onSubmit={handleSubmit}
       onCancel={() => navigate('/admin/blog')}
-      title={isEditing ? 'Modifier un article' : 'Nouvel article'}
+      title={isEditing ? 'Modifier l\'article' : 'Nouvel article'}
       initialValues={initialValues}
     >
-      {({ handleChange, formData }) => (
-        <div>
-          {/* Titre et auteur */}
+      {({ handleChange, formData, setFormData }) => (
+        <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Titre
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Titre</label>
               <input
                 type="text"
                 name="titre"
@@ -65,9 +108,7 @@ const BlogPostForm = ({ article = null }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Auteur
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Auteur</label>
               <input
                 type="text"
                 name="auteur"
@@ -78,11 +119,8 @@ const BlogPostForm = ({ article = null }) => {
             </div>
           </div>
 
-          {/* Catégorie */}
           <div className="mt-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Catégorie
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Catégorie</label>
             <select
               name="categorie"
               value={formData.categorie}
@@ -93,83 +131,82 @@ const BlogPostForm = ({ article = null }) => {
               <option value="actualites">Actualités</option>
               <option value="formations">Formations</option>
               <option value="insertion">Insertion</option>
-              <option value="temoignages">Témoignages</option>
             </select>
           </div>
 
-          {/* Tags */}
           <div className="mt-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Tags (séparés par des virgules)
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Tags (séparés par des virgules)</label>
             <input
               type="text"
-              value={formData.tags.join(', ')}
-              onChange={handleTagChange}
+              name="tags"
+              value={formData.tags}
+              onChange={handleChange}
               className="w-full px-3 py-2 border rounded-lg"
-              placeholder="Ex: formation, insertion, emploi"
+              placeholder="Ex: formation, emploi"
             />
           </div>
 
-          {/* Contenu */}
           <div className="mt-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Contenu
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Contenu</label>
             <textarea
               name="contenu"
               value={formData.contenu}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-lg"
-              rows="8"
+              rows="6"
               required
             />
           </div>
 
-          {/* Image */}
           <div className="mt-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Image
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Image</label>
             <input
               type="file"
               name="image"
-              onChange={(e) => handleChange(e)}
+              onChange={handleChange}
               className="w-full px-3 py-2 border rounded-lg"
             />
           </div>
 
-          {/* Statut */}
-          <div className="mt-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Statut
-            </label>
-            <select
-              name="statut"
-              value={formData.statut}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg"
-            >
-              <option value="brouillon">Brouillon</option>
-              <option value="publie">Publié</option>
-              <option value="archive">Archivé</option>
-            </select>
-          </div>
-
-          {/* Options */}
-          <div className="mt-6">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                name="is_a_la_une"
-                checked={formData.is_a_la_une}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              <span>À la une</span>
+          <div className="mt-6 flex gap-4">
+            <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700">Statut</label>
+                <select
+                    name="statut"
+                    value={formData.statut}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border rounded-lg"
+                >
+                    <option value="brouillon">Brouillon</option>
+                    <option value="publie">Publié</option>
+                </select>
             </div>
+            <div className="flex items-end pb-2">
+                <label className="inline-flex items-center">
+                    <input
+                        type="checkbox"
+                        name="is_a_la_une"
+                        checked={formData.is_a_la_une}
+                        onChange={handleChange}
+                        className="rounded border-gray-300 text-blue-600 shadow-sm"
+                    />
+                    <span className="ml-2 text-sm text-gray-600">Mettre à la une</span>
+                </label>
+            </div>
+            <div className="mt-6">
+              <br/>
+  <label className="block text-sm font-medium text-gray-700">Résumé</label>
+  <textarea
+    name="resume"
+    value={formData.resume}
+    onChange={handleChange}
+    className="w-full px-3 py-2 border rounded-lg"
+    rows="3"
+  />
+</div>
+
           </div>
-        </div>
+        </>
       )}
     </AdminForm>
   );

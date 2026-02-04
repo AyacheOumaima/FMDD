@@ -28,6 +28,7 @@ import UnauthorizedPage from './pages/UnauthorizedPage';
 import EvenementForm from './components/admin/EvenementForm';
 import FormationsAdmin from './pages/admin/FormationsAdmin';
 import FormationForm from './components/admin/FormationForm';
+import BlogPostForm from './components/admin/BlogPostForm';
 // Dashboards
 import UserDashboard from './pages/dashboards/UserDashboard';
 import FormateurDashboard from './pages/dashboards/FormateurDashboard';

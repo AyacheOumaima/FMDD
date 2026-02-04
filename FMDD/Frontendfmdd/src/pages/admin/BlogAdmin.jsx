@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../../axios';
+import api from '../../axios';
 import { Link } from 'react-router-dom';
 
 const BlogAdmin = () => {
@@ -15,10 +15,11 @@ const BlogAdmin = () => {
     try {
       setLoading(true);
       // ✅ FIXED: Changed '/admin/blog' to '/blog' (or '/posts' depending on your backend route)
-      const response = await axios.get('/blog');
-      
+      const response = await api.get('/api/v1/admin/blog');
+      console.log(response.data);
+
       // Handle Laravel resource wrapper (data.data) or simple array
-      setArticles(response.data.data || response.data);
+      setArticles(response.data.articles.data);
       setError(null);
     } catch (err) {
       console.error(err);
@@ -35,9 +36,11 @@ const BlogAdmin = () => {
     }
 
     try {
-        await axios.delete(`/blog/${id}`);
+await api.delete(`/api/v1/admin/blog/${id}`);
         // Remove article from list immediately
         setArticles(prev => prev.filter(article => article.id !== id));
+        await fetchArticles(); // 🔥 resync DB ↔ UI
+
     } catch (err) {
         console.error(err);
         alert("Erreur lors de la suppression de l'article");

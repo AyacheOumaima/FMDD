@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('blog', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constraned()->onDelete('cascade');
             $table->string('auteur')->nullable();
             $table->string('titre');
             $table->string('slug')->unique();
