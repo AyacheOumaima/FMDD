@@ -32,7 +32,7 @@ export default function TargetAudience() {
       description: "Partenariats stratégiques, conseil en développement durable et collaboration sur des projets d'impact territorial.",
       benefits: ["Expertise conseil", "Partenariats durables", "Projets territoriaux", "Formation équipes"],
       color: "teal",
-      cta: "Devenir partenaire",
+      cta: "Devenir adhérent",
       link: "/contact"
     },
     {
@@ -68,7 +68,7 @@ export default function TargetAudience() {
       description: "Strategic partnerships, sustainable development consulting and collaboration on territorial impact projects.",
       benefits: ["Consulting expertise", "Sustainable partnerships", "Territorial projects", "Team training"],
       color: "teal",
-      cta: "Become a partner",
+      cta: "Become a member",
       link: "/contact"
     },
     {
@@ -105,7 +105,7 @@ export default function TargetAudience() {
         description: "الشراكات الاستراتيجية، والاستشارات في مجال التنمية المستدامة، والتعاون في مشاريع التأثير الإقليمي.",
         benefits: ["الخبرة الاستشارية", "الشراكات المستدامة", "المشاريع الإقليمية", "تدريب الفريق"],
         color: "teal",
-        cta: "كن شريكا",
+        cta: "كن عضوا",
         link: "/contact"
       },
       {
