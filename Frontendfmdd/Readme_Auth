@@ -1,0 +1,112 @@
+Type d’authentification utilisé
+✔ Authentification par JWT (JSON Web Token)
+
+Le backend laravel génère un token JWT après une connexion réussie.
+
+Le frontend stocke ce token localement (localStorage).
+
+Toutes les pages protégées vérifient la présence du token avant d’autoriser l’accès.
+
+Le token contient les informations essentielles de l’utilisateur (id, rôle...).
+
+🔄 Workflow d’authentification 
+1️⃣ L’utilisateur envoie ses identifiants
+
+Depuis le formulaire de connexion :
+
+email
+
+mot de passe
+
+2️⃣ Le frontend envoie les données au backend
+
+Via une requête API :
+
+POST /api/auth/login
+
+3️⃣ Le backend vérifie et retourne
+
+un token JWT
+
+les infos de l’utilisateur (id, nom, rôle…)
+
+4️⃣ Le frontend stocke ces données
+
+Le token va dans localStorage
+
+L’utilisateur est sauvegardé dans un AuthContext global
+
+5️⃣ Les routes protégées vérifient le token
+
+Si le token existe → accès autorisé
+Sinon → redirection vers /login
+
+6️⃣ Déconnexion
+
+Suppression du token
+
+Suppression des infos utilisateur
+
+Redirection vers la page de connexion
+
+🧩 Éléments qui interviennent dans le système
+✔ 1. Formulaires
+
+Login
+
+Register
+
+Ils collectent les infos de l’utilisateur et envoient les données au backend.
+
+✔ 2. AuthContext
+
+C’est le gestionnaire global de l’utilisateur :
+
+sauvegarde l’utilisateur connecté
+
+permet aux composants d’accéder à user
+
+gère login() et logout()
+
+Il évite de passer les données utilisateur de composant en composant.
+
+✔ 3. Service API d’authentification
+
+Un petit module qui :
+
+envoie les requêtes de login et register
+
+reçoit le token
+
+transmet les données au AuthContext
+
+Il centralise la communication avec le backend.
+
+✔ 4. Gestion du token
+
+Stockage du token JWT dans :
+
+localStorage
+
+Permet de maintenir la session même si l’utilisateur recharge la page.
+
+✔ 5. Routes protégées
+
+Un composant spécial (PrivateRoute) permet de :
+
+bloquer l’accès aux pages privées si aucun token
+
+autoriser l’accès si l’utilisateur est authentifié
+
+🚧 Pages qui utilisent l’authentification
+🔐 Pages protégées (nécessitent un token)
+
+Soumission de témoignage
+
+Espace insertion professionnelle
+
+Actions comme "participer", "devenir bénévole", etc.
+
+🔓 Pages publiques (pas de token)
+
+Accueil, blog, contact, galerie, formations, projets...
