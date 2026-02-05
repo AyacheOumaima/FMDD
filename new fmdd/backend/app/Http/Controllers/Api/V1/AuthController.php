@@ -32,7 +32,7 @@ class AuthController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'phone' => $request->phone,
-            'role' => $request->role,
+            'role' => User::ROLE_USER, // Securité : Rôle 'user' par défaut
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -64,7 +64,8 @@ class AuthController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Une erreur est survenue lors de la connexion'
+                'message' => 'Une erreur est survenue lors de la connexion',
+                'error' => $e->getMessage() // Added for debugging
             ], 500);
         }
     }
@@ -84,4 +85,4 @@ class AuthController extends Controller
             'user' => auth()->user()
         ]);
     }
-} 
+}
