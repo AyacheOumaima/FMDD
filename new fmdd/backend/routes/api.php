@@ -47,7 +47,7 @@ Route::prefix('v1')->group(function () {
     // *Routes Temoignages (public)
     Route::get('/temoignages', [TemoignageController::class, 'index']);
     Route::post('/temoignages', [TemoignageController::class, 'store']);
-        // *Routes insertions (public)
+    // *Routes insertions (public)
     Route::get('/insertions', [InsertionController::class, 'index']);
     Route::get('/insertions/{id}', [InsertionController::class, 'show']);
     // Routes de la galerie publiques
@@ -100,19 +100,19 @@ Route::prefix('v1')->group(function () {
 
 // ========== ROUTES PROTÉGÉES ==========
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
-     Route::middleware(['role:admin'])->group(function () {
+    Route::middleware(['role:admin'])->group(function () {
         Route::post('/insertions', [InsertionController::class, 'store']);
         Route::put('/insertions/{id}', [InsertionController::class, 'update']);
         Route::delete('/insertions/{id}', [InsertionController::class, 'destroy']);
-         // Routes Temoignages (Admin)
+        // Routes Temoignages (Admin)
         // Route::get('/temoignages', [TemoignageController::class, 'all']);
-            Route::get('/temoignages/all', [TemoignageController::class, 'all']); // Admin seulement
-            Route::post('/temoignages/{id}/accept', [TemoignageController::class, 'accept']);
-    Route::post('/temoignages/{id}/reject', [TemoignageController::class, 'reject']);
+        Route::get('/temoignages/all', [TemoignageController::class, 'all']); // Admin seulement
+        Route::post('/temoignages/{id}/accept', [TemoignageController::class, 'accept']);
+        Route::post('/temoignages/{id}/reject', [TemoignageController::class, 'reject']);
         Route::put('/temoignages/{id}', [TemoignageController::class, 'update']);
         Route::delete('/temoignages/{id}', [TemoignageController::class, 'destroy']);
-    Route::get('/profile', [ProfileController::class, 'show']);
-    Route::put('/profile', [ProfileController::class, 'update']);
+        Route::get('/profile', [ProfileController::class, 'show']);
+        Route::put('/profile', [ProfileController::class, 'update']);
     });
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
@@ -131,22 +131,24 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     // ✅ ROUTES ADMIN CORRIGÉES
     Route::middleware(['role:admin'])->group(function () {
         // Fix 1: Stats URL (Handle BOTH paths to be safe)
-        Route::get('/stats', [AdminController::class, 'stats']);       
-        Route::get('/admin/stats', [AdminController::class, 'stats']); 
+        Route::get('/stats', [AdminController::class, 'stats']);
+        Route::get('/admin/stats', [AdminController::class, 'stats']);
 
         // Fix 2: Resources (Map Frontend names to Backend Controllers)
         Route::apiResource('formations', FormationController::class);
-       
+
 
         // Route::apiResource('temoignages', TemoignageController::class);
         Route::apiResource('evenements', EventController::class); // Frontend calls it 'evenements'
-        
+
         // 👇👇 THIS WAS THE MISSING LINE FOR PROJECTS 👇👇
         Route::apiResource('projets', \App\Http\Controllers\Api\V1\ProjetController::class);
 
         Route::prefix('admin')->group(function () {
             Route::get('/adherents', [AdminController::class, 'adherents']);
             Route::get('/payments', [AdminController::class, 'payments']);
+            Route::put('/users/{id}/role', [AdminController::class, 'toggleRole']);
+            Route::delete('/users/{id}', [AdminController::class, 'destroyUser']);
         });
     });
 
@@ -192,7 +194,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::post('/demandes-partenariat/{demande_id}/valider', [DemandePartenariatProjetController::class, 'valider']);
         Route::post('/demandes-sponsoring/{demande_id}/valider', [DemandeSponsoringProjetController::class, 'valider']);
     });
-    
+
     Route::middleware('role:super_admin')->group(function () {
         // Routes super admin
     });

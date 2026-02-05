@@ -23,7 +23,7 @@ class AdminController extends Controller
             'adherents_actifs' => Adherent::where('statut_cotisation', Adherent::STATUT_PAYEE)->count(),
             'adherents_en_attente' => Adherent::where('statut_cotisation', Adherent::STATUT_EN_ATTENTE)->count(),
             'adherents_expires' => Adherent::where('statut_cotisation', Adherent::STATUT_EXPIREE)->count(),
-            
+
             // Global statistics
             'total_users' => User::count(),
             'total_projets' => Projet::count(),
@@ -31,7 +31,7 @@ class AdminController extends Controller
             'total_evenements' => Event::count(),
             'total_insertions' => Insertion::count(),
             'total_temoignages' => Temoignage::count(),
-            
+
             'cotisations_mensuelles' => DB::table('adherents')
                 ->whereYear('created_at', date('Y'))
                 ->select(
@@ -69,5 +69,33 @@ class AdminController extends Controller
             ->paginate(10);
 
         return response()->json($payments);
+    }
+
+    public function toggleRole(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $request->validate(['role' => 'required|string|in:user,admin,adherent']);
+
+        $user->role = $request->role;
+        $user->save();
+
+        return response()->json([
+            'message' => "Rôle de l'utilisateur mis à jour",
+            'user' => $user
+        ]);
+    }
+
+    public function destroyUser($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Prevent admin from deleting themselves
+        if (auth()->id() == $id) {
+            return response()->json(['message' => 'Vous ne pouvez pas supprimer votre propre compte'], 403);
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'Utilisateur supprimé avec succès']);
     }
 }

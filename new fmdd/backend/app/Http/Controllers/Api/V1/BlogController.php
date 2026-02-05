@@ -27,8 +27,8 @@ class BlogController extends Controller
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
                     $q->where('titre', 'like', "%{$search}%")
-                      ->orWhere('contenu', 'like', "%{$search}%")
-                      ->orWhere('resume', 'like', "%{$search}%");
+                        ->orWhere('contenu', 'like', "%{$search}%")
+                        ->orWhere('resume', 'like', "%{$search}%");
                 });
             }
 
@@ -116,28 +116,85 @@ class BlogController extends Controller
     }
 
     /**
-     * Récupérer tous les tags uniques
+     * Créer un nouvel article (Admin)
      */
-    public function tags(): JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        try {
-            $articles = Blog::publie()->get();
-            $tags = collect();
+        $validated = $request->validate([
+            'titre' => 'required|string|max:255',
+            'contenu' => 'required|string',
+            'resume' => 'nullable|string',
+            'image' => 'nullable|image|max:5120',
+            'tags' => 'nullable|array',
+            'statut' => 'nullable|string|in:publie,brouillon',
+            'date_publication' => 'nullable|date',
+        ]);
 
-            foreach ($articles as $article) {
-                if (!empty($article->tags)) {
-                    $tags = $tags->concat($article->tags);
-                }
-            }
-
-            return response()->json([
-                'tags' => $tags->unique()->values()->all()
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Erreur lors de la récupération des tags',
-                'error' => $e->getMessage()
-            ], 500);
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('blog', 'public');
+            $validated['image'] = 'storage/' . $path;
         }
+
+        $validated['slug'] = \Illuminate\Support\Str::slug($validated['titre']);
+        $validated['auteur_id'] = auth()->id();
+
+        $article = Blog::create($validated);
+
+        return response()->json([
+            'message' => 'Article créé avec succès',
+            'article' => $article
+        ], 201);
     }
-} 
+
+    /**
+     * Mettre à jour un article (Admin)
+     */
+    public function update(Request $request, $id): JsonResponse
+    {
+        $article = Blog::findOrFail($id);
+
+        $validated = $request->validate([
+            'titre' => 'sometimes|string|max:255',
+            'contenu' => 'sometimes|string',
+            'resume' => 'nullable|string',
+            'image' => 'nullable|image|max:5120',
+            'tags' => 'nullable|array',
+            'statut' => 'nullable|string|in:publie,brouillon',
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($article->image && \Illuminate\Support\Facades\File::exists(public_path($article->image))) {
+                \Illuminate\Support\Facades\File::delete(public_path($article->image));
+            }
+            $path = $request->file('image')->store('blog', 'public');
+            $validated['image'] = 'storage/' . $path;
+        }
+
+        if (isset($validated['titre'])) {
+            $validated['slug'] = \Illuminate\Support\Str::slug($validated['titre']);
+        }
+
+        $article->update($validated);
+
+        return response()->json([
+            'message' => 'Article mis à jour avec succès',
+            'article' => $article
+        ]);
+    }
+
+    /**
+     * Supprimer un article (Admin)
+     */
+    public function destroy($id): JsonResponse
+    {
+        $article = Blog::findOrFail($id);
+
+        if ($article->image && \Illuminate\Support\Facades\File::exists(public_path($article->image))) {
+            \Illuminate\Support\Facades\File::delete(public_path($article->image));
+        }
+
+        $article->delete();
+
+        return response()->json(['message' => 'Article supprimé avec succès']);
+    }
+}
